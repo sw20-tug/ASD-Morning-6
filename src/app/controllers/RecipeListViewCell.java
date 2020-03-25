@@ -39,8 +39,8 @@ public class RecipeListViewCell extends ListCell<Recipe> {
         super.updateItem(recipe, empty);
 
         if(empty || recipe == null) {
-
-            //do nothing
+            //Don't show anything
+            setGraphic(null);
 
         } else {
             if (mLLoader == null) {
@@ -61,7 +61,6 @@ public class RecipeListViewCell extends ListCell<Recipe> {
             lblCookTime.setText(String.valueOf(recipe.getCookTime().toMinutes()));
 
             String tmp = "appdata/images/" + recipe.getPhotos().firstElement();
-            System.out.println(tmp);
 
             try {
                 FileInputStream input = new FileInputStream(tmp);
