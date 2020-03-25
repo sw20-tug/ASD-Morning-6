@@ -28,6 +28,7 @@ public class Recipe implements Serializable {
         this.type = type;
         this.prepTime = prepTime;
         this.cookTime = cookTime;
+        this.isFavourite = false;
 
         this.cookInstructions = new Vector<>();
         this.photos = new Vector<>();
