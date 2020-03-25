@@ -28,9 +28,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         //Recipe
         Recipe r1 = new Recipe("Toast", "two toast slices, ham and cheese", MealType.PORK, Duration.ofMinutes(2), Duration.ofMinutes(3));
-        r1.addPhoto("mealpic_1_1.jpg");
-        r1.addPhoto("mealpic_1_2.jpg");
-        r1.addPhoto("mealpic_1_3.jpg");
+        r1.addPhoto("toast.png");
+        r1.addPhoto("mealpic_1_2.png");
 
         Instruction i1 = new Instruction("Schinken auflegen", "Lege den Schinken auf! LOS!", "cookinstruction_1_1");
         Instruction i2 = new Instruction("Toast toasten", "Toaster vorheizen, und rein damit.", "cookinstruction_1_2");
@@ -39,12 +38,13 @@ public class Main extends Application {
 
 
         Recipe r2 = new Recipe("Fischstäbchen", "4 Iglo Pkg. Fischstäbchen", MealType.FISH, Duration.ofMinutes(2), Duration.ofMinutes(15));
-        r2.addPhoto("mealpic_2_1.jpg");
+        r2.setFavourite(true);
+        r2.addPhoto("toast.png");
         r2.addPhoto("mealpic_2_2.jpg");
 
 
         Recipe r3 = new Recipe("Humusaufstrich", "500g Kompost, 2 TL Öl", MealType.VEGAN, Duration.ofMinutes(20000), Duration.ofMinutes(20));
-        r3.addPhoto("mealpic_3_1.jpg");
+        r3.addPhoto("food.png");
 
         Instruction i3 = new Instruction("Komposter entleeren", "Mistgabel holen und loslegen!", "cookinstruction_3_1");
         r3.addInstruction(i3);

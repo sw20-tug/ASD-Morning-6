@@ -33,6 +33,17 @@ public class RecipeManager implements Serializable {
         this.recipes = recipes;
     }
 
+    public Vector<Recipe> getFavRecipes() {
+        Vector<Recipe> retList = new Vector<>();
+
+        for(int i = 0; i < this.recipes.size(); i++){
+            if(this.recipes.get(i).isFavourite())
+                retList.add(recipes.get(i));
+        }
+
+        return retList;
+    }
+
     public void addRecipe(Recipe r) {
         r.setId(id);
         this.recipes.add(r);
