@@ -3,9 +3,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" >
    <bottom>
       <Label fx:id="lblMessage" prefHeight="16.0" prefWidth="598.0" text="Label" BorderPane.alignment="CENTER" />
    </bottom>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="TF_dishname" alignment="CENTER" promptText="Enter Dish-Name" />
+            <TextField fx:id="TF_description" alignment="CENTER" promptText="Enter Description" />
+            <TextField fx:id="TF_dishtype" alignment="CENTER" promptText="Enter Type of Dish" />
+            <TextField fx:id="TF_preptime" alignment="CENTER" promptText="Enter Preperation Time" />
+            <TextField fx:id="TF_cooktime" alignment="CENTER" promptText="Cooking Time" />
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="btn_save" mnemonicParsing="false" onAction="#onActionBtnSave" text="Save" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </center>
 </BorderPane>

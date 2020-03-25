@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,6 +34,8 @@ public class MainController implements Initializable {
 
     @FXML
     private ListView listFavRecipes;
+
+
 
     private ObservableList<Recipe> recipeAllObservableList;
     private ObservableList<Recipe> recipeFavObservableList;
