@@ -7,35 +7,33 @@
    <bottom>
       <Label fx:id="lblMessage" prefHeight="16.0" prefWidth="1440" style="-fx-background-color: yellow;" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
    </bottom>
-   <left>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="btnAddRecipe" alignment="CENTER" mnemonicParsing="false" onAction="#onActionbtnAddRecipe" prefHeight="26.0" prefWidth="105.0" text="ADD" textAlignment="CENTER" />
-         </children>
-      </VBox>
-   </left>
    <center>
-      <TabPane fx:id="tabPaneRecipe" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab fx:id="tabAll" text="ALL">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView fx:id="listAllRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab fx:id="tabFavourites" text="FAVOURITES">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView fx:id="listFavRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
+      <AnchorPane prefHeight="400.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnAddRecipe" alignment="CENTER" layoutX="1.0" layoutY="3.0" mnemonicParsing="false" onAction="#onActionbtnAddRecipe" prefHeight="50.0" prefWidth="275.0" style="-fx-background-color: #00e673;" text="ADD" textAlignment="CENTER" />
+            <TabPane fx:id="tabPaneRecipe" layoutX="1.0" layoutY="55.0" prefHeight="735.0" prefWidth="275.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="tabAll" text="ALL">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="655.0" prefWidth="275.0">
+                           <children>
+                              <ListView fx:id="listAllRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="275.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="tabFavourites" text="FAVOURITES">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="listFavRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="275.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
    </center>
 </BorderPane>

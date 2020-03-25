@@ -49,4 +49,8 @@ public class RecipeManager implements Serializable {
         this.recipes.add(r);
         id++;
     }
+
+    public void deleteRecipe(Recipe r){
+        this.recipes.remove(r);
+    }
 }

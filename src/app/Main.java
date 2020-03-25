@@ -21,6 +21,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("../resources/views/main.fxml"));
         primaryStage.setTitle("COOK");
         primaryStage.setScene(new Scene(root, 1440, 810));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
@@ -54,9 +55,6 @@ public class Main extends Application {
         RecipeManager.getInstance().addRecipe(r3);
 
         try {
-
-            printData();
-
             FileOutputStream fos = new FileOutputStream(new File("appdata/cookdata.bin"));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
@@ -69,8 +67,6 @@ public class Main extends Application {
             ObjectInputStream ois = new ObjectInputStream(fis);
 
             RecipeManager.setInstance(((RecipeManager) ois.readObject()));
-
-            printData();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
