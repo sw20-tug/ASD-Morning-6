@@ -15,7 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -82,6 +82,11 @@ public class MainController implements Initializable {
 
         deleteItem.setOnAction((event) -> {
             Recipe r = (Recipe) lv.getSelectionModel().getSelectedItem();
+            for(String s : r.getPhotos())
+            {
+                File f = new File(s);
+                f.deleteOnExit();
+            }
             RecipeManager.getInstance().deleteRecipe(r);
             fillListViews();
         });
