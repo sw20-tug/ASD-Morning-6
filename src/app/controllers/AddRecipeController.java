@@ -1,22 +1,26 @@
 package app.controllers;
+
 import app.enums.MealType;
-import app.models.RecipeManager;
-import javafx.event.ActionEvent;
+import app.models.Instruction;
 import app.models.Recipe;
+import app.models.RecipeManager;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-//import java.awt.event.ActionEvent;
-import javax.swing.text.StyledEditorKit;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 
 public class AddRecipeController implements Initializable {
@@ -24,40 +28,91 @@ public class AddRecipeController implements Initializable {
     @FXML
     private Label lblMessage;
 
-    private int param1;
+    @FXML
+    private TextField txtName;
 
     @FXML
-    private TextField TF_dishname;
+    private TextField txtDescription;
 
     @FXML
-    private TextField TF_description;
+    private Spinner spinType;
 
     @FXML
-    private TextField TF_dishtype;
+    private Spinner spinPrepTime;
 
     @FXML
-    private TextField TF_preptime;
+    private Spinner spinCookTime;
 
     @FXML
-    private TextField TF_cooktime;
-
-
-    @FXML
-    private Button btn_save;
+    private ToggleButton toggleFavourite;
 
     @FXML
-    private  Button btn_cancel;
+    private ToggleButton toggleGuideEnabled;
 
-    public AddRecipeController(int inparam1) {
-        this.param1 = inparam1;
-    }
+    @FXML
+    private Button btnSave;
+
+    @FXML
+    private Button btnCancel;
+
+    @FXML
+    private ImageView imageViewAdd;
+
+    @FXML
+    private Button btnPrevImage;
+
+    @FXML
+    private Button btnNextImage;
+
+    @FXML
+    private Button btnAddImage;
+
+    @FXML
+    private Button btnRemoveImage;
+
+    @FXML
+    private Label lblPicCount;
+
+    private Vector<String> imgVec;
+
+    public AddRecipeController() {}
 
     @FXML
     private void initialize() {}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setInfoMessage("Add a new recipe!");
+        setInfoMessage("Fill in the shown fields to add a new recipe!");
+
+        initBtnListener();
+        initMealTypeSpinner();
+
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream("appdata/images/dummy.png");
+            Image tmpRecipeImage = new Image(input, imageViewAdd.getFitWidth(), imageViewAdd.getFitHeight(), false, true);
+            imageViewAdd.setImage(tmpRecipeImage);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        imgVec = new Vector<>();
+    }
+
+    private void initBtnListener() {
+        btnCancel.setOnAction(event -> { onActionBtnCancel(event); });
+        btnSave.setOnAction(event -> { onActionBtnSave(event); });
+        btnPrevImage.setOnAction(event -> { onActionBtnPrevImage(event); });
+        btnNextImage.setOnAction(event -> { onActionBtnNextImage(event); });
+        btnAddImage.setOnAction(event -> { onActionBtnAddImage(event); });
+        btnRemoveImage.setOnAction(event -> { onActionBtnRemoveImage(event); });
+    }
+
+    private void initMealTypeSpinner() {
+        ObservableList<MealType> mealTypes = FXCollections.observableArrayList(MealType.FISH, MealType.PORK, MealType.VEGAN, MealType.BEEF, MealType.CHICKEN, MealType.VEGETARIAN);
+        SpinnerValueFactory<MealType> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<MealType>(mealTypes);
+        valueFactory.setValue(MealType.BEEF);
+        spinType.setValueFactory(valueFactory);
     }
 
     private void setInfoMessage(String msg) {
@@ -75,50 +130,46 @@ public class AddRecipeController implements Initializable {
         lblMessage.setText("SUCCESS --> " + msg);
     }
 
+    public void onActionBtnSave(ActionEvent actionEvent) {
+        if (txtName.getText().isEmpty() || txtDescription.getText().isEmpty()) {
+            setErrorMessage("Please enter some values in the text fields!");
+        } else {
+            Recipe r = new Recipe(txtName.getText(), txtDescription.getText(), (MealType) spinType.getValue(), Duration.ofMinutes(Long.valueOf((int) spinPrepTime.getValue())), Duration.ofMinutes(Long.valueOf((int) spinCookTime.getValue())));
+            r.setFavourite(toggleFavourite.isSelected());
+            r.setGuideEnabled(toggleGuideEnabled.isSelected());
 
+            //TODO Picture adding - file chooser etc.
 
-    @FXML
-    public void onActionBtnSave(ActionEvent actionEvent){
+            RecipeManager.getInstance().addRecipe(r);
 
-        // check if all text field have values
-        if (TF_dishname.getText().isEmpty() || TF_description.getText().isEmpty() || TF_dishtype.getText().isEmpty() ||
-            TF_preptime.getText().isEmpty() || TF_cooktime.getText().isEmpty()){
-            setErrorMessage("Please enter valid Values in the proper fields!");
-        }
-        else{
-            Recipe new_recipe = new Recipe();
+            setSuccessMessage("Added an new Recipe!");
 
-            new_recipe.setName(TF_dishname.getText());
-            new_recipe.setDescription(TF_description.getText());
-
-            MealType type = MealType.valueOf(TF_dishtype.getText().toUpperCase());
-            new_recipe.setType(type);
-
-            try {
-                new_recipe.setPrepTime(Duration.ofMinutes(Integer.parseInt(TF_preptime.getText())));
-                new_recipe.setCookTime(Duration.ofMinutes(Integer.parseInt(TF_cooktime.getText())));
-
-            }catch (Exception e){
-                setErrorMessage("Please enter a valid number for cooking/preparation time (in minutes)");
-                e.printStackTrace();
-            }
-
-            // check if every attribute has a value
-            if (!(new_recipe.getName().isEmpty() || new_recipe.getDescription().isEmpty() || (new_recipe.getType()) == null
-                || (new_recipe.getPrepTime() == null) || (new_recipe.getCookTime() == null))){
-
-                RecipeManager.getInstance().addRecipe(new_recipe);
-
-                Stage stage = (Stage) TF_dishtype.getScene().getWindow();
-                stage.close();
-            }
+            closeAddWindow();
         }
     }
 
-    public void onActionbtnCancel(ActionEvent actionEvent){
-        Stage stage = (Stage) btn_cancel.getScene().getWindow();
+    public void onActionBtnCancel(ActionEvent actionEvent) {
+        closeAddWindow();
+    }
+
+    private void closeAddWindow() {
+        Stage stage = (Stage) lblMessage.getScene().getWindow();
         stage.close();
     }
 
-}
+    public void onActionBtnPrevImage(ActionEvent actionEvent) {
+        //TODO
+    }
 
+    public void onActionBtnNextImage(ActionEvent actionEvent) {
+        //TODO
+    }
+
+    public void onActionBtnAddImage(ActionEvent actionEvent) {
+        //TODO
+    }
+
+    public void onActionBtnRemoveImage(ActionEvent actionEvent) {
+        //TODO
+    }
+}
