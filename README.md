@@ -2,6 +2,4 @@
  
 This is the repository for the team *ASD: Morning 6*
 
-hallo 
-
-test
+hallo
