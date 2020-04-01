@@ -2,10 +2,35 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <Label fx:id="lblMessage" prefHeight="16.0" prefWidth="598.0" text="Label" BorderPane.alignment="CENTER" />
    </bottom>
+   <top>
+      <VBox prefHeight="276.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="TF_dishname" alignment="CENTER" promptText="Enter Dish-Name" />
+            <TextField fx:id="TF_description" alignment="CENTER" promptText="Enter Description" />
+            <TextField fx:id="TF_dishtype" alignment="CENTER" promptText="Enter Type of Dish" />
+            <TextField fx:id="TF_preptime" alignment="CENTER" promptText="Enter Preperation Time (minutes)" />
+            <TextField fx:id="TF_cooktime" alignment="CENTER" promptText="Cooking Time" />
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <BorderPane prefHeight="107.0" prefWidth="552.0" BorderPane.alignment="CENTER">
+         <left>
+            <Button fx:id="btn_save" alignment="TOP_LEFT" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#onActionBtnSave" prefHeight="60.0" prefWidth="110.0" text="Save" textAlignment="CENTER" textFill="#26cd74" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Bell MT" size="32.0" />
+               </font>
+            </Button>
+         </left>
+         <right>
+            <Button fx:id="btn_cancel" mnemonicParsing="false" onAction="#onActionbtnCancel" text="Cancel" textFill="#cd2828" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
+   </center>
 </BorderPane>
