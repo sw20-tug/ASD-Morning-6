@@ -19,7 +19,10 @@ public class Recipe implements Serializable {
     private Vector<Instruction> cookInstructions;
     private Vector<String> photos;
 
-    public Recipe() {}
+    public Recipe() {
+        this.cookInstructions = new Vector<>();
+        this.photos = new Vector<>();
+    }
 
     public Recipe(String name, String description, MealType type, Duration prepTime, Duration cookTime) {
         this.id = -1;
