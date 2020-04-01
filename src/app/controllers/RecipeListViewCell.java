@@ -38,10 +38,9 @@ public class RecipeListViewCell extends ListCell<Recipe> {
     protected void updateItem(Recipe recipe, boolean empty) {
         super.updateItem(recipe, empty);
 
-        if(empty || recipe == null) {
-
-            //do nothing
-
+        if (empty || recipe == null) {
+            //Don't show anything
+            setGraphic(null);
         } else {
             if (mLLoader == null) {
                 mLLoader = new FXMLLoader(getClass().getResource("../../resources/views/listCellRecipe.fxml"));
@@ -60,8 +59,7 @@ public class RecipeListViewCell extends ListCell<Recipe> {
             lblPrepTime.setText(String.valueOf(recipe.getPrepTime().toMinutes()));
             lblCookTime.setText(String.valueOf(recipe.getCookTime().toMinutes()));
 
-            String tmp = "appdata/images/" + recipe.getPhotos().firstElement();
-            System.out.println(tmp);
+            String tmp = recipe.getPhotos().size() != 0 ? "appdata/images/" + recipe.getPhotos().firstElement() : "appdata/images/dummy.png";
 
             try {
                 FileInputStream input = new FileInputStream(tmp);

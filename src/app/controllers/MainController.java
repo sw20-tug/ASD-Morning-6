@@ -10,12 +10,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 
 import java.io.IOException;
@@ -53,6 +54,8 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initViewElements();
         fillListViews();
+        setListViewContextMenu(listAllRecipes);
+        setListViewContextMenu(listFavRecipes);
     }
 
     private void initViewElements() {
@@ -67,9 +70,30 @@ public class MainController implements Initializable {
         recipeFavObservableList = FXCollections.<Recipe>observableArrayList(RecipeManager.getInstance().getFavRecipes());
         listFavRecipes.setItems(recipeFavObservableList);
         listFavRecipes.setCellFactory(recipeListView -> new RecipeListViewCell());
-
-        setSuccessMessage("Recipes loaded!");
     }
+
+    private void setListViewContextMenu(ListView lv){
+
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem editItem = new MenuItem("Edit");
+        MenuItem deleteItem = new MenuItem("Delete");
+
+        editItem.setOnAction((event) -> {
+            Recipe r = (Recipe) lv.getSelectionModel().getSelectedItem();
+            //TODO implement and call edit
+        });
+
+        deleteItem.setOnAction((event) -> {
+            Recipe r = (Recipe) lv.getSelectionModel().getSelectedItem();
+            RecipeManager.getInstance().deleteRecipe(r);
+            fillListViews();
+        });
+        contextMenu.getItems().addAll(editItem,deleteItem);
+
+        lv.setContextMenu(contextMenu);
+
+    }
+
 
     private void setInfoMessage(String msg) {
         lblMessage.setStyle("-fx-background-color:yellow; -fx-text-fill:black;");
@@ -86,21 +110,33 @@ public class MainController implements Initializable {
         lblMessage.setText("SUCCESS --> " + msg);
     }
 
+    private void updateView() {
+        fillListViews();
+        setInfoMessage("Data updated");
+    }
+
     public void onActionbtnAddRecipe(ActionEvent actionEvent) {
         setInfoMessage("ADD window is open!");
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/addRecipe.fxml"));
-        Parent root1 = null;
+        Parent rootAddView = null;
         try {
             AddRecipeController addRecipeController = new AddRecipeController(1800);
 
             fxmlLoader.setController(addRecipeController);
-            root1 = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("ADD RECIPE");
-            stage.setScene(new Scene(root1));
-            stage.show();
+            rootAddView = (Parent) fxmlLoader.load();
+            Stage stageAddView = new Stage();
+            stageAddView.initModality(Modality.APPLICATION_MODAL);
+            stageAddView.setTitle("ADD RECIPE");
+            stageAddView.setResizable(false);
+            stageAddView.setScene(new Scene(rootAddView));
+
+            stageAddView.setOnHidden((WindowEvent event1) -> {
+                updateView();
+            });
+
+            stageAddView.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
