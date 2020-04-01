@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+       <VBox prefHeight="40.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+           <children>
+               <HBox minHeight="35.0" minWidth="800.0" style="-fx-background-color: grey;">
+                   <children>
+                       <Button fx:id="btnSave" alignment="CENTER" minWidth="120.0" mnemonicParsing="false" style="-fx-background-color: #00e673;" text="SAVE">
+                     <HBox.margin>
+                        <Insets left="140.0" right="140.0" />
+                     </HBox.margin></Button>
+                       <Button fx:id="btnCancel" alignment="CENTER" minWidth="120.0" mnemonicParsing="false" style="-fx-background-color: crimson;" text="CANCEL">
+                     <HBox.margin>
+                        <Insets left="140.0" right="140.0" />
+                     </HBox.margin></Button>
+                   </children>
+               </HBox>
+               <Label fx:id="lblMessage" prefHeight="16.0" prefWidth="800.0" text="Label" BorderPane.alignment="CENTER" />
+           </children>
+       </VBox>
+   </bottom>
+   <top>
+      <GridPane maxHeight="300.0" minHeight="300.0" BorderPane.alignment="CENTER">
+<!--          GridPane.columnIndex="0" GridPane.rowIndex="1"-->
+        <TextField fx:id="txtName" alignment="CENTER" promptText="Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="txtDescription" alignment="CENTER" promptText="Description" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Spinner fx:id="spinType" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Spinner fx:id="spinPrepTime" GridPane.columnIndex="1" GridPane.rowIndex="3">
+          <valueFactory>
+              <SpinnerValueFactory.IntegerSpinnerValueFactory max="300" min="1" />
+          </valueFactory>
+        </Spinner>
+        <Spinner fx:id="spinCookTime" GridPane.columnIndex="1" GridPane.rowIndex="4">
+          <valueFactory>
+              <SpinnerValueFactory.IntegerSpinnerValueFactory max="300" min="1" />
+          </valueFactory>
+        </Spinner>
+        <ToggleButton fx:id="toggleFavourite" contentDisplay="TOP" mnemonicParsing="false" text="Favourite" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <ToggleButton fx:id="toggleGuideEnabled" mnemonicParsing="false" text="Guide enabled" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+         <Label text="Name:" />
+         <Label text="Description:" GridPane.rowIndex="1" />
+         <Label text="Meal type:" GridPane.rowIndex="2" />
+         <Label text="Preparation time: (minutes)" GridPane.rowIndex="3" />
+         <Label text="Cooking time: (minutes)" GridPane.rowIndex="4" />
+         <Label text="Add as favourite?" GridPane.rowIndex="5" />
+         <Label text="Enable guide?" GridPane.rowIndex="6" />
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </GridPane>
+   </top>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="imageViewAdd" fitHeight="150.0" fitWidth="200.0" layoutX="59.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="btnPrevImage" layoutX="59.0" layoutY="183.0" maxWidth="100.0" minWidth="100.0" mnemonicParsing="false" style="-fx-background-color: lightgrey; -fx-background-radius: 0;" text="◀" />
+            <Button fx:id="btnNextImage" layoutX="159.0" layoutY="183.0" maxWidth="100.0" minWidth="100.0" mnemonicParsing="false" style="-fx-background-color: lightgrey; -fx-background-radius: 0;" text="▶" />
+            <Button fx:id="btnAddImage" layoutX="353.0" layoutY="90.0" minWidth="-Infinity" mnemonicParsing="false" prefWidth="100.0" text="Add pic" />
+            <Button fx:id="btnRemoveImage" layoutX="473.0" layoutY="90.0" mnemonicParsing="false" prefWidth="100.0" text="Remove pic" />
+            <Label fx:id="lblPicCount" alignment="CENTER" layoutX="353.0" layoutY="66.0" prefHeight="16.0" prefWidth="220.0" text="Photos added (0)" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

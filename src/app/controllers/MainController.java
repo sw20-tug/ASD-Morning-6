@@ -11,11 +11,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 
@@ -118,10 +115,10 @@ public class MainController implements Initializable {
     public void onActionbtnAddRecipe(ActionEvent actionEvent) {
         setInfoMessage("ADD window is open!");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/addRecipe.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/editRecipe.fxml"));
         Parent rootAddView = null;
         try {
-            AddRecipeController addRecipeController = new AddRecipeController(1800);
+            AddRecipeController addRecipeController = new AddRecipeController();
 
             fxmlLoader.setController(addRecipeController);
             rootAddView = (Parent) fxmlLoader.load();

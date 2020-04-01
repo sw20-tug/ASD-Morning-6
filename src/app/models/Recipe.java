@@ -21,6 +21,7 @@ public class Recipe implements Serializable {
     private Vector<String> photos;
 
     public Recipe() {
+        this.id = UUID.randomUUID();
         this.cookInstructions = new Vector<>();
         this.photos = new Vector<>();
     }
