@@ -8,8 +8,6 @@ public class RecipeManager implements Serializable {
 
     private Vector<Recipe> recipes;
 
-    private static int id = 1;
-
     public RecipeManager() {
         this.recipes = new Vector<>();
     }
@@ -30,23 +28,26 @@ public class RecipeManager implements Serializable {
     }
 
     public void setRecipes(Vector<Recipe> recipes) {
-        this.recipes = recipes;
+        for(Recipe recipe : recipes){
+            addRecipe(recipe);
+        }
     }
 
     public Vector<Recipe> getFavRecipes() {
         Vector<Recipe> retList = new Vector<>();
 
-        for(int i = 0; i < this.recipes.size(); i++){
-            if(this.recipes.get(i).isFavourite())
-                retList.add(recipes.get(i));
+        for (Recipe recipe : this.recipes) {
+            if (recipe.isFavourite())
+                retList.add(recipe);
         }
 
         return retList;
     }
 
-    public void addRecipe(Recipe r) {
-        r.setId(id);
+    public void addRecipe(Recipe r) throws IllegalArgumentException {
+        if(r == null){
+            throw new IllegalArgumentException("Not possible to add null!");
+        }
         this.recipes.add(r);
-        id++;
     }
 }

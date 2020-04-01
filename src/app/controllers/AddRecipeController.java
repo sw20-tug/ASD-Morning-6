@@ -91,30 +91,8 @@ public class AddRecipeController implements Initializable {
             new_recipe.setName(TF_dishname.getText());
             new_recipe.setDescription(TF_description.getText());
 
-            switch (TF_dishtype.getText().toUpperCase()){
-
-                case "FISH":
-                    new_recipe.setType(MealType.FISH);
-                    break;
-                case "CHICKEN":
-                    new_recipe.setType(MealType.CHICKEN);
-                    break;
-                case "PORK":
-                    new_recipe.setType(MealType.PORK);
-                    break;
-                case "VEGAN":
-                    new_recipe.setType(MealType.VEGAN);
-                    break;
-                case "BEEF":
-                    new_recipe.setType(MealType.BEEF);
-                    break;
-                case "VEGETARIAN":
-                    new_recipe.setType(MealType.VEGETARIAN);
-                    break;
-                default:
-                    setErrorMessage("Choose one of the following meal types:   Fish, Chicken, Pork, Vergan, Beef, " +
-                            "Vegetarian");
-            }
+            MealType type = MealType.valueOf(TF_dishtype.getText().toUpperCase());
+            new_recipe.setType(type);
 
             try {
                 new_recipe.setPrepTime(Duration.ofMinutes(Integer.parseInt(TF_preptime.getText())));
