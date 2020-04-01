@@ -28,7 +28,7 @@ public class AddRecipeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setInfoMessage("Add a new recipe! - " + this.param1);
+        setInfoMessage("Add a new recipe!");
     }
 
     private void setInfoMessage(String msg) {

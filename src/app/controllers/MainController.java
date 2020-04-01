@@ -10,9 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -50,6 +50,8 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initViewElements();
         fillListViews();
+        setListViewContextMenu(listAllRecipes);
+        setListViewContextMenu(listFavRecipes);
     }
 
     private void initViewElements() {
@@ -64,8 +66,28 @@ public class MainController implements Initializable {
         recipeFavObservableList = FXCollections.<Recipe>observableArrayList(RecipeManager.getInstance().getFavRecipes());
         listFavRecipes.setItems(recipeFavObservableList);
         listFavRecipes.setCellFactory(recipeListView -> new RecipeListViewCell());
+    }
 
-        setSuccessMessage("Recipes loaded!");
+    private void setListViewContextMenu(ListView lv){
+
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem editItem = new MenuItem("Edit");
+        MenuItem deleteItem = new MenuItem("Delete");
+
+        editItem.setOnAction((event) -> {
+            Recipe r = (Recipe) lv.getSelectionModel().getSelectedItem();
+            //TODO implement and call edit
+        });
+
+        deleteItem.setOnAction((event) -> {
+            Recipe r = (Recipe) lv.getSelectionModel().getSelectedItem();
+            RecipeManager.getInstance().deleteRecipe(r);
+            fillListViews();
+        });
+        contextMenu.getItems().addAll(editItem,deleteItem);
+
+        lv.setContextMenu(contextMenu);
+
     }
 
     private void setInfoMessage(String msg) {
@@ -96,6 +118,7 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("ADD RECIPE");
+            stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
         } catch (IOException e) {
