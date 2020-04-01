@@ -4,10 +4,11 @@ import app.enums.MealType;
 
 import java.io.Serializable;
 import java.time.Duration;
+import java.util.UUID;
 import java.util.Vector;
 
 public class Recipe implements Serializable {
-    private int id;
+    private UUID id;
     private String name;
     private String description;
     private MealType type;
@@ -25,7 +26,7 @@ public class Recipe implements Serializable {
     }
 
     public Recipe(String name, String description, MealType type, Duration prepTime, Duration cookTime) {
-        this.id = -1;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.type = type;
@@ -37,12 +38,8 @@ public class Recipe implements Serializable {
         this.photos = new Vector<>();
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
