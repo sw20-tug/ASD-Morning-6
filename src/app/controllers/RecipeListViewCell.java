@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.models.GlobalConstants;
 import app.models.Recipe;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -59,7 +60,7 @@ public class RecipeListViewCell extends ListCell<Recipe> {
             lblPrepTime.setText(String.valueOf(recipe.getPrepTime().toMinutes()));
             lblCookTime.setText(String.valueOf(recipe.getCookTime().toMinutes()));
 
-            String tmp = recipe.getPhotos().size() != 0 ? "appdata/images/" + recipe.getPhotos().firstElement() : "appdata/images/dummy.png";
+            String tmp = recipe.getPhotos().size() != 0 ?  recipe.getPhotos().firstElement() : GlobalConstants.IMAGE_FOLDER_PATH  + "dummy.png";
 
             try {
                 FileInputStream input = new FileInputStream(tmp);

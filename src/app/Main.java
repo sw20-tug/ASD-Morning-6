@@ -1,6 +1,7 @@
 package app;
 
 import app.enums.MealType;
+import app.models.GlobalConstants;
 import app.models.Instruction;
 import app.models.Recipe;
 import app.models.RecipeManager;
@@ -29,8 +30,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         //Recipe
         Recipe r1 = new Recipe("Toast", "two toast slices, ham and cheese", MealType.PORK, Duration.ofMinutes(2), Duration.ofMinutes(3));
-        r1.addPhoto("toast.png");
-        r1.addPhoto("mealpic_1_2.png");
+        r1.addPhoto(GlobalConstants.IMAGE_FOLDER_PATH + "toast.png");
+        r1.addPhoto(GlobalConstants.IMAGE_FOLDER_PATH + "mealpic_1_2.png");
 
         Instruction i1 = new Instruction("Schinken auflegen", "Lege den Schinken auf! LOS!", "cookinstruction_1_1");
         Instruction i2 = new Instruction("Toast toasten", "Toaster vorheizen, und rein damit.", "cookinstruction_1_2");
@@ -40,12 +41,12 @@ public class Main extends Application {
 
         Recipe r2 = new Recipe("Fischstäbchen", "4 Iglo Pkg. Fischstäbchen", MealType.FISH, Duration.ofMinutes(2), Duration.ofMinutes(15));
         r2.setFavourite(true);
-        r2.addPhoto("toast.png");
-        r2.addPhoto("mealpic_2_2.jpg");
+        r2.addPhoto(GlobalConstants.IMAGE_FOLDER_PATH + "toast.png");
+        r2.addPhoto(GlobalConstants.IMAGE_FOLDER_PATH + "mealpic_2_2.jpg");
 
 
         Recipe r3 = new Recipe("Humusaufstrich", "500g Kompost, 2 TL Öl", MealType.VEGAN, Duration.ofMinutes(20000), Duration.ofMinutes(20));
-        r3.addPhoto("food.png");
+        r3.addPhoto(GlobalConstants.IMAGE_FOLDER_PATH + "food.png");
 
         Instruction i3 = new Instruction("Komposter entleeren", "Mistgabel holen und loslegen!", "cookinstruction_3_1");
         r3.addInstruction(i3);
@@ -55,7 +56,7 @@ public class Main extends Application {
         RecipeManager.getInstance().addRecipe(r3);
 
         try {
-            FileOutputStream fos = new FileOutputStream(new File("appdata/cookdata.bin"));
+            FileOutputStream fos = new FileOutputStream(new File(GlobalConstants.APPDATA_FOLDER_PATH + "cookdata.bin"));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
             oos.writeObject(RecipeManager.getInstance());
@@ -63,7 +64,7 @@ public class Main extends Application {
             fos.close();
             oos.close();
 
-            FileInputStream fis = new FileInputStream(new File("appdata/cookdata.bin"));
+            FileInputStream fis = new FileInputStream(new File(GlobalConstants.APPDATA_FOLDER_PATH + "cookdata.bin"));
             ObjectInputStream ois = new ObjectInputStream(fis);
 
             RecipeManager.setInstance(((RecipeManager) ois.readObject()));
