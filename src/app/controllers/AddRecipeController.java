@@ -175,7 +175,7 @@ public class AddRecipeController implements Initializable {
 
             for(int i = 0; i < bufferVec.size(); i++) {
                 try {
-                    String imageName = GlobalConstants.IMAGE_FOLDER_PATH + tmpRecipe.getId() + "_" + i;
+                    String imageName = GlobalConstants.IMAGE_FOLDER_PATH + tmpRecipe.getId() + "_" + i + ".png";
                     ImageIO.write(bufferVec.get(i), "png", new File(imageName));
                     tmpRecipe.addPhoto(imageName);
                 } catch (IOException e) {
@@ -186,7 +186,7 @@ public class AddRecipeController implements Initializable {
             RecipeManager.getInstance().addRecipe(tmpRecipe);
 
             setSuccessMessage("Added an new Recipe!");
-
+            MainController.currentRecipe = tmpRecipe;
             closeAddWindow();
         }
     }
