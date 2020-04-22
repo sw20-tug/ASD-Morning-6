@@ -1,7 +1,10 @@
 package app.controllers;
 
+import app.enums.MealType;
 import app.models.Recipe;
 import app.models.RecipeManager;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -70,6 +73,24 @@ public class MainController implements Initializable {
     private Label lblCookingTime;
 
     @FXML
+    private ComboBox cmbMealType;
+
+    @FXML
+    private Label lblPrepTimeFilter;
+
+    @FXML
+    private Label lblCookTimeFilter;
+
+    @FXML
+    private Slider sliderPrepTime;
+
+    @FXML
+    private Slider sliderCookTime;
+
+    @FXML
+    private Button btnUndoFilter;
+
+    @FXML
     private AnchorPane apDetailView;
 
 
@@ -97,6 +118,7 @@ public class MainController implements Initializable {
             updateDetailView();
             setListViewContextMenu(listAllRecipes);
             setListViewContextMenu(listFavRecipes);
+            initFilterElements();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -125,6 +147,32 @@ public class MainController implements Initializable {
         recipeFavObservableList = FXCollections.<Recipe>observableArrayList(RecipeManager.getInstance().getFavRecipes());
         listFavRecipes.setItems(recipeFavObservableList);
         listFavRecipes.setCellFactory(recipeListView -> new RecipeListViewCell());
+    }
+
+    private void initFilterElements() {
+        btnUndoFilter.setDisable(true);
+
+        ObservableList<MealType> mealTypes = FXCollections.observableArrayList(MealType.FISH, MealType.PORK, MealType.VEGAN, MealType.BEEF, MealType.CHICKEN, MealType.VEGETARIAN);
+        cmbMealType.setItems(mealTypes);
+
+        lblPrepTimeFilter.setText("PrepTime - " + String.valueOf(0));
+        sliderPrepTime.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                lblPrepTimeFilter.setText("PrepTime - " + Math.round((Double) new_val));
+                filterRecipes();
+            }
+        });
+
+        lblCookTimeFilter.setText("CookTime - " + String.valueOf(0));
+
+        sliderCookTime.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                lblCookTimeFilter.setText("CookTime - " + Math.round((Double) new_val));
+                filterRecipes();
+            }
+        });
     }
 
     private void updateDetailView() {
@@ -285,6 +333,34 @@ public class MainController implements Initializable {
         loadImage();
         //TODO display instructions??
 
+    }
+
+    public void onActionbtnUndoFilter(ActionEvent actionEvent) {
+        fillListViews();
+        btnUndoFilter.setDisable(true);
+        cmbMealType.setValue(null);
+        sliderCookTime.setValue(0);
+        sliderPrepTime.setValue(0);
+        setInfoMessage("Removed Filter");
+
+    }
+
+    public void onActionCmbMealType(ActionEvent actionEvent) {
+        if(cmbMealType.getSelectionModel().getSelectedItem() != null){
+            filterRecipes();
+        }
+
+    }
+
+    private void filterRecipes(){
+        btnUndoFilter.setDisable(false);
+        MealType chosenMealType = (MealType) cmbMealType.getSelectionModel().getSelectedItem();
+        int prepTimeMin = (int) Math.round(sliderPrepTime.getValue());
+        int cookTimeMin = (int) Math.round(sliderCookTime.getValue());
+        setSuccessMessage("Chosen filter option (MealType, PrepTime, CookTime): " + chosenMealType + " | " + prepTimeMin + " | " + cookTimeMin);
+
+        listAllRecipes.setItems(FXCollections.<Recipe>observableArrayList(RecipeManager.getInstance().getRecipesByMealType(chosenMealType, prepTimeMin, cookTimeMin)));
+        listFavRecipes.setItems(FXCollections.<Recipe>observableArrayList(RecipeManager.getInstance().getFavRecipesByMealType(chosenMealType, prepTimeMin, cookTimeMin)));
     }
 
     public void lvItemClicked(MouseEvent mouseEvent) {
