@@ -143,8 +143,7 @@ public class EditRecipeController implements Initializable {
             r.setGuideEnabled(toggleGuideEnabled.isSelected());
 
             //TODO Picture adding - file chooser etc.
-
-          //TODO RecipeManager Update
+            RecipeManager.getInstance().updateRecipe(inRecipe.getId(), r);
 
             setSuccessMessage("Updated Recipe!");
 
