@@ -76,8 +76,8 @@ public class MainController implements Initializable {
         MenuItem deleteItem = new MenuItem("Delete");
 
         editItem.setOnAction((event) -> {
-            Recipe r = (Recipe) lv.getSelectionModel().getSelectedItem();
-            //TODO implement and call edit
+            openEditView((Recipe) lv.getSelectionModel().getSelectedItem());
+
         });
 
         deleteItem.setOnAction((event) -> {
@@ -143,5 +143,32 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
 
+    }
+
+    private void openEditView(Recipe r) {
+        setInfoMessage("EDIT window is open!");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/editRecipe.fxml"));
+        Parent rootEditView = null;
+        try {
+            EditRecipeController editRecipeController = new EditRecipeController(r);
+
+            fxmlLoader.setController(editRecipeController);
+            rootEditView = (Parent) fxmlLoader.load();
+            Stage stageEditView = new Stage();
+            stageEditView.initModality(Modality.APPLICATION_MODAL);
+            stageEditView.setTitle("EDIT RECIPE");
+            stageEditView.setResizable(false);
+            stageEditView.setScene(new Scene(rootEditView));
+
+            stageEditView.setOnHidden((WindowEvent event1) -> {
+                updateView();
+            });
+
+            stageEditView.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
