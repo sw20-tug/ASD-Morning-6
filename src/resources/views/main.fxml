@@ -92,6 +92,16 @@
                   <ImageView fx:id="imgFav" fitHeight="40.0" fitWidth="40.0" layoutX="255.0" layoutY="374.0" pickOnBounds="true" preserveRatio="true" />
                 </children>
             </AnchorPane>
+            <HBox layoutX="276.0" layoutY="1.0" prefHeight="55.0" prefWidth="797.0">
+                <children>
+                    <ComboBox fx:id="cmbMealType" onAction="#onActionCmbMealType" prefHeight="25.0" prefWidth="164.0" />
+                    <Button fx:id="btnUndoFilter" mnemonicParsing="false" onAction="#onActionbtnUndoFilter" prefHeight="25.0" prefWidth="154.0" text="Undo Filter" />
+                    <Label fx:id="lblCookTimeFilter" prefHeight="17.0" prefWidth="123.0" text="Cooktime" />
+                    <Slider fx:id="sliderCookTime" max="400.0" />
+                    <Slider fx:id="sliderPrepTime" max="400.0" />
+                    <Label fx:id="lblPrepTimeFilter" prefHeight="17.0" prefWidth="175.0" text="Preptime" />
+                </children>
+            </HBox>
          </children>
       </AnchorPane>
    </center>
