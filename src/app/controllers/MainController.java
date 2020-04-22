@@ -11,14 +11,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
-
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -79,12 +76,17 @@ public class MainController implements Initializable {
         MenuItem deleteItem = new MenuItem("Delete");
 
         editItem.setOnAction((event) -> {
-            Recipe r = (Recipe) lv.getSelectionModel().getSelectedItem();
-            //TODO implement and call edit
+            openEditView((Recipe) lv.getSelectionModel().getSelectedItem());
+
         });
 
         deleteItem.setOnAction((event) -> {
             Recipe r = (Recipe) lv.getSelectionModel().getSelectedItem();
+            for(String s : r.getPhotos())
+            {
+                File f = new File(s);
+                f.deleteOnExit();
+            }
             RecipeManager.getInstance().deleteRecipe(r);
             fillListViews();
         });
@@ -118,10 +120,10 @@ public class MainController implements Initializable {
     public void onActionbtnAddRecipe(ActionEvent actionEvent) {
         setInfoMessage("ADD window is open!");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/addRecipe.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/editRecipe.fxml"));
         Parent rootAddView = null;
         try {
-            AddRecipeController addRecipeController = new AddRecipeController(1800);
+            AddRecipeController addRecipeController = new AddRecipeController();
 
             fxmlLoader.setController(addRecipeController);
             rootAddView = (Parent) fxmlLoader.load();
@@ -141,5 +143,32 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
 
+    }
+
+    private void openEditView(Recipe r) {
+        setInfoMessage("EDIT window is open!");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/editRecipe.fxml"));
+        Parent rootEditView = null;
+        try {
+            EditRecipeController editRecipeController = new EditRecipeController(r);
+
+            fxmlLoader.setController(editRecipeController);
+            rootEditView = (Parent) fxmlLoader.load();
+            Stage stageEditView = new Stage();
+            stageEditView.initModality(Modality.APPLICATION_MODAL);
+            stageEditView.setTitle("EDIT RECIPE");
+            stageEditView.setResizable(false);
+            stageEditView.setScene(new Scene(rootEditView));
+
+            stageEditView.setOnHidden((WindowEvent event1) -> {
+                updateView();
+            });
+
+            stageEditView.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
