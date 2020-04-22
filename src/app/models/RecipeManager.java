@@ -1,6 +1,7 @@
 package app.models;
 
 import java.io.Serializable;
+import java.util.UUID;
 import java.util.Vector;
 
 public class RecipeManager implements Serializable {
@@ -54,4 +55,19 @@ public class RecipeManager implements Serializable {
     public void deleteRecipe(Recipe r){
         this.recipes.remove(r);
     }
+    public void updateRecipe(UUID id, Recipe newRecipe) {
+        for (Recipe r : this.recipes) {
+            if (r.getId() == id) {
+                r.setName(newRecipe.getName());
+                r.setDescription(newRecipe.getDescription());
+                r.setType(newRecipe.getType());
+                r.setPrepTime(newRecipe.getPrepTime());
+                r.setCookTime(newRecipe.getCookTime());
+                r.setFavourite(newRecipe.isFavourite());
+                r.setGuideEnabled(newRecipe.isGuideEnabled());
+            }
+        }
+        //TODO photos update
+    }
+
 }

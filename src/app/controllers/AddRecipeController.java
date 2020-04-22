@@ -1,26 +1,32 @@
 package app.controllers;
 
 import app.enums.MealType;
-import app.models.Instruction;
+import app.models.GlobalConstants;
 import app.models.Recipe;
 import app.models.RecipeManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ResourceBundle;
 import java.util.Vector;
+
 
 
 public class AddRecipeController implements Initializable {
@@ -73,7 +79,13 @@ public class AddRecipeController implements Initializable {
     @FXML
     private Label lblPicCount;
 
-    private Vector<String> imgVec;
+    private Vector<BufferedImage> bufferVec;
+
+    private int currentImage = 0;
+
+    private Recipe tmpRecipe;
+
+    private Image defaultRecipeImage;
 
     public AddRecipeController() {}
 
@@ -101,23 +113,23 @@ public class AddRecipeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setInfoMessage("Fill in the shown fields to add a new recipe!");
-
         initBtnListener();
         initMealTypeSpinner();
 
         FileInputStream input = null;
         try {
             input = new FileInputStream("appdata/images/dummy.png");
-            Image tmpRecipeImage = new Image(input, imageViewAdd.getFitWidth(), imageViewAdd.getFitHeight(), false, true);
-            imageViewAdd.setImage(tmpRecipeImage);
+            defaultRecipeImage = new Image(input, imageViewAdd.getFitWidth(), imageViewAdd.getFitHeight(), false, true);
+            imageViewAdd.setImage(defaultRecipeImage);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        imgVec = new Vector<>();
+        tmpRecipe = new Recipe();
+        bufferVec = new Vector<>();
     }
 
-    private void initBtnListener() {
+    private void initBtnListener(){
         btnCancel.setOnAction(event -> { onActionBtnCancel(event); });
         btnSave.setOnAction(event -> { onActionBtnSave(event); });
         btnPrevImage.setOnAction(event -> { onActionBtnPrevImage(event); });
@@ -152,13 +164,26 @@ public class AddRecipeController implements Initializable {
         if (txtName.getText().isEmpty() || txtDescription.getText().isEmpty()) {
             setErrorMessage("Please enter some values in the text fields!");
         } else {
-            Recipe r = new Recipe(txtName.getText(), txtDescription.getText(), (MealType) spinType.getValue(), Duration.ofMinutes((long) (int) spinPrepTime.getValue()), Duration.ofMinutes((long) (int) spinCookTime.getValue()));
-            r.setFavourite(toggleFavourite.isSelected());
-            r.setGuideEnabled(toggleGuideEnabled.isSelected());
 
-            //TODO Picture adding - file chooser etc.
+            tmpRecipe.setName(txtName.getText());
+            tmpRecipe.setDescription(txtDescription.getText());
+            tmpRecipe.setType((MealType) spinType.getValue());
+            tmpRecipe.setCookTime(Duration.ofMinutes(Long.valueOf((int) spinPrepTime.getValue())));
+            tmpRecipe.setPrepTime(Duration.ofMinutes(Long.valueOf((int) spinCookTime.getValue())));
+            tmpRecipe.setFavourite(toggleFavourite.isSelected());
+            tmpRecipe.setGuideEnabled(toggleGuideEnabled.isSelected());
 
-            RecipeManager.getInstance().addRecipe(r);
+            for(int i = 0; i < bufferVec.size(); i++) {
+                try {
+                    String imageName = GlobalConstants.IMAGE_FOLDER_PATH + tmpRecipe.getId() + "_" + i;
+                    ImageIO.write(bufferVec.get(i), "png", new File(imageName));
+                    tmpRecipe.addPhoto(imageName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            RecipeManager.getInstance().addRecipe(tmpRecipe);
 
             setSuccessMessage("Added an new Recipe!");
 
@@ -176,18 +201,76 @@ public class AddRecipeController implements Initializable {
     }
 
     public void onActionBtnPrevImage(ActionEvent actionEvent) {
-        //TODO
+        if(bufferVec.size() > 1) {
+            if(currentImage <= 0)
+            {
+                currentImage = bufferVec.size()-1;
+            }
+            else
+            {
+                currentImage--;
+            }
+            loadImage();
+        }
     }
 
     public void onActionBtnNextImage(ActionEvent actionEvent) {
-        //TODO
+
+        if(bufferVec.size() > 1) {
+            if(currentImage >= bufferVec.size()-1)
+            {
+                currentImage = 0;
+            }
+            else
+            {
+                currentImage++;
+            }
+            loadImage();
+        }
     }
 
     public void onActionBtnAddImage(ActionEvent actionEvent) {
-        //TODO
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Image");
+        File file = fileChooser.showOpenDialog(btnAddImage.getScene().getWindow());
+        if (file != null) {
+            try {
+                BufferedImage img = ImageIO.read(file);
+                imageViewAdd.setImage(SwingFXUtils.toFXImage(img, null));
+                bufferVec.add(img);
+                currentImage = bufferVec.size()-1;
+                lblPicCount.setText("Photos added (" + bufferVec.size() + ")");
+
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        btnRemoveImage.setDisable(false);
     }
 
     public void onActionBtnRemoveImage(ActionEvent actionEvent) {
-        //TODO
+        bufferVec.remove(currentImage);
+        if(currentImage <= 0)
+        {
+            currentImage = bufferVec.size()-1;
+        }
+        else
+        {
+            currentImage--;
+        }
+        loadImage();
+        lblPicCount.setText("Photos added (" + bufferVec.size() + ")");
+
+    }
+
+    private void loadImage() {
+        if (bufferVec.size() > 0) {
+            imageViewAdd.setImage(SwingFXUtils.toFXImage(bufferVec.get(currentImage), null));
+        }
+        else {
+            imageViewAdd.setImage(defaultRecipeImage);
+            btnRemoveImage.setDisable(true);
+        }
     }
 }
