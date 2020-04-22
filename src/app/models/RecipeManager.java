@@ -1,6 +1,7 @@
 package app.models;
 
 import java.io.Serializable;
+import java.util.UUID;
 import java.util.Vector;
 
 public class RecipeManager implements Serializable {
@@ -54,4 +55,6 @@ public class RecipeManager implements Serializable {
     public void deleteRecipe(Recipe r){
         this.recipes.remove(r);
     }
+
+
 }
