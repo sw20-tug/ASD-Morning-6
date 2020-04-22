@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.MainController">
    <bottom>
@@ -17,7 +21,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="655.0" prefWidth="275.0">
                            <children>
-                              <ListView fx:id="listAllRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="275.0" />
+                              <ListView fx:id="listAllRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#lvItemClicked" prefHeight="707.0" prefWidth="275.0" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -26,13 +30,68 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ListView fx:id="listFavRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="275.0" />
+                              <ListView fx:id="listFavRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#lvItemFavClicked" prefHeight="710.0" prefWidth="275.0" />
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
               </tabs>
             </TabPane>
+            <AnchorPane fx:id="apDetailView" layoutX="282.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1150.0" style="-fx-background-color: linen;">
+                <children>
+                    <ImageView fx:id="imageViewDetails" fitHeight="270.0" fitWidth="360.0" layoutX="395.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true" />
+                    <Button fx:id="btnPrevImage" layoutX="355.0" layoutY="183.0" maxWidth="100.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionBtnPrevImage" opacity="0.8" prefHeight="60.0" prefWidth="40.0" style="-fx-background-color: lightsteelblue; -fx-background-radius: 3;" text="◀">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                    <Button fx:id="btnNextImage" layoutX="755.0" layoutY="183.0" maxWidth="100.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionBtnNextImage" opacity="0.8" prefHeight="60.0" prefWidth="40.0" style="-fx-background-color: lightsteelblue; -fx-background-radius: 3;" text="▶">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                  <Label fx:id="lblName" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="151.0" layoutY="18.0" prefHeight="60.0" prefWidth="860.0" text="Random Gerichtename der potenziell so lange sein könnte" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="Calibri Bold" size="22.0" />
+                     </font></Label>
+                  <Label layoutX="315.0" layoutY="382.0" prefHeight="23.0" prefWidth="72.0" text="Mealtype:">
+                     <font>
+                        <Font name="Calibri Bold" size="16.0" />
+                     </font></Label>
+                    <Label fx:id="lblMealType" layoutX="387.0" layoutY="382.0" prefHeight="23.0" prefWidth="85.0" text="sampleType">
+                        <font>
+                            <Font name="Calibri Bold" size="16.0" />
+                        </font></Label>
+                    <Label layoutX="489.0" layoutY="382.0" prefHeight="23.0" prefWidth="126.0" text="Preparation Time:">
+                        <font>
+                            <Font name="Calibri Bold" size="16.0" />
+                        </font></Label>
+                    <Label fx:id="lblPrepTime" layoutX="615.0" layoutY="382.0" prefHeight="23.0" prefWidth="60.0" text="90 min.">
+                        <font>
+                            <Font name="Calibri Bold" size="16.0" />
+                        </font></Label>
+                    <Label layoutX="689.0" layoutY="382.0" prefHeight="23.0" prefWidth="98.0" text="Cooking Time:">
+                        <font>
+                            <Font name="Calibri Bold" size="16.0" />
+                        </font></Label>
+                    <Label fx:id="lblCookingTime" layoutX="787.0" layoutY="382.0" prefHeight="23.0" prefWidth="60.0" text="180 min.">
+                        <font>
+                            <Font name="Calibri Bold" size="16.0" />
+                        </font></Label>
+                  <Label fx:id="lblDescription" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="151.0" layoutY="426.0" prefHeight="195.0" prefWidth="860.0" text="Description of the food" wrapText="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Label>
+                  <ImageView fx:id="imgFav" fitHeight="40.0" fitWidth="40.0" layoutX="255.0" layoutY="374.0" pickOnBounds="true" preserveRatio="true" />
+                </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </center>
