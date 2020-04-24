@@ -394,7 +394,6 @@ public class MainController implements Initializable {
     private void loadImage() {
         if (currentRecipe.getPhotos().size() > 0) {
             try {
-                System.out.println("loading Image: " + currentRecipe.getPhotos().elementAt(currentImage));
                 FileInputStream input = new FileInputStream(currentRecipe.getPhotos().elementAt(currentImage));
                 Image img = new Image(input, imageViewDetails.getFitWidth(), imageViewDetails.getFitHeight(), false, true);
                 imageViewDetails.setImage(img);
