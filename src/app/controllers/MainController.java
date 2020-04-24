@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.enums.MealType;
+import app.models.Instruction;
 import app.models.Recipe;
 import app.models.RecipeManager;
 import javafx.beans.value.ChangeListener;
@@ -8,6 +9,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +25,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.w3c.dom.Text;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -30,7 +34,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 public class MainController implements Initializable {
     @FXML
@@ -44,6 +50,12 @@ public class MainController implements Initializable {
 
     @FXML
     private ListView listFavRecipes;
+
+    @FXML
+    private TextField searchAll;
+
+    @FXML
+    private TextField searchFav;
 
     @FXML
     private ImageView imageViewDetails;
@@ -119,6 +131,7 @@ public class MainController implements Initializable {
             setListViewContextMenu(listAllRecipes);
             setListViewContextMenu(listFavRecipes);
             initFilterElements();
+            searchListener();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -139,14 +152,94 @@ public class MainController implements Initializable {
         input.close();
     }
 
-    private void fillListViews() {
-        recipeAllObservableList = FXCollections.<Recipe>observableArrayList(RecipeManager.getInstance().getRecipes());
-        listAllRecipes.setItems(recipeAllObservableList);
-        listAllRecipes.setCellFactory(recipeListView -> new RecipeListViewCell());
+    private void searchListener() {
 
-        recipeFavObservableList = FXCollections.<Recipe>observableArrayList(RecipeManager.getInstance().getFavRecipes());
-        listFavRecipes.setItems(recipeFavObservableList);
+        FilteredList<Recipe> allFiltered;
+
+        allFiltered = new FilteredList<Recipe>(FXCollections.observableArrayList(RecipeManager.getInstance().getRecipes()));
+
+        searchAll.textProperty().addListener((observable, oldValue, newValue) -> {
+            allFiltered.setPredicate(recipe -> {
+
+                if (newValue.isEmpty())
+                    return true;
+
+                // search every attribute
+                if (recipe.getName().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+                else if (recipe.getCookTime().toString().contains(newValue.toLowerCase()))
+                    return true;
+                else if (recipe.getPrepTime().toString().contains(newValue.toLowerCase()))
+                    return true;
+                else if (recipe.getDescription().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+                else if (recipe.getType().toString().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+
+                /* // search for instruction
+                Vector<Instruction> instructions = recipe.getCookInstructions();
+
+                // check every instruction for search term
+                for (int i = 0; i < recipe.getCookInstructions().size(); i++)
+                {
+                    if (instructions.get(i).getDescription().contains(newValue.toLowerCase()))
+                        return true;
+                    else if (instructions.get(i).getTask().contains(newValue.toLowerCase()))
+                        return true;
+                }
+                */
+
+                return false;
+            });
+        });
+
+        listAllRecipes.setItems(new SortedList<Recipe>(allFiltered));
+
+        FilteredList<Recipe> favFiltered;
+
+        favFiltered = new FilteredList<Recipe>(FXCollections.observableArrayList(RecipeManager.getInstance().getFavRecipes()));
+
+        searchFav.textProperty().addListener((observable, oldValue, newValue) -> {
+            favFiltered.setPredicate(recipe -> {
+
+                // search every attribute
+                if (recipe.getName().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+                else if (recipe.getCookTime().toString().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+                else if (recipe.getPrepTime().toString().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+                else if (recipe.getDescription().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+                else if (recipe.getType().toString().toLowerCase().contains(newValue.toLowerCase()))
+                    return true;
+
+                /* // search for instruction
+                Vector<Instruction> instructions = recipe.getCookInstructions();
+
+                // check every instruction for search term
+                for (int i = 0; i < recipe.getCookInstructions().size(); i++)
+                {
+                    if (instructions.get(i).getDescription().contains(newValue.toLowerCase()))
+                        return true;
+                    else if (instructions.get(i).getTask().contains(newValue.toLowerCase()))
+                        return true;
+                }
+                */
+                return false;
+            });
+        });
+
+        listFavRecipes.setItems(new SortedList<Recipe>(favFiltered));
+
+    }
+
+
+
+    private void fillListViews() {
+        listAllRecipes.setCellFactory(recipeListView -> new RecipeListViewCell());
         listFavRecipes.setCellFactory(recipeListView -> new RecipeListViewCell());
+        searchListener();
     }
 
     private void initFilterElements() {
@@ -301,7 +394,6 @@ public class MainController implements Initializable {
     private void loadImage() {
         if (currentRecipe.getPhotos().size() > 0) {
             try {
-                System.out.println("loading Image: " + currentRecipe.getPhotos().elementAt(currentImage));
                 FileInputStream input = new FileInputStream(currentRecipe.getPhotos().elementAt(currentImage));
                 Image img = new Image(input, imageViewDetails.getFitWidth(), imageViewDetails.getFitHeight(), false, true);
                 imageViewDetails.setImage(img);
