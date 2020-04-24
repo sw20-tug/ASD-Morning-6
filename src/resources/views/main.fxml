@@ -17,7 +17,8 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="655.0" prefWidth="275.0">
                            <children>
-                              <ListView fx:id="listAllRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="275.0" />
+                              <ListView fx:id="listAllRecipes" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="275.0" />
+                              <TextField id="l" fx:id="searchAll" layoutX="1.0" layoutY="2.0" prefHeight="25.0" prefWidth="273.0" promptText="search all recipes..." />
                            </children>
                         </AnchorPane>
                   </content>
@@ -26,7 +27,8 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ListView fx:id="listFavRecipes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="275.0" />
+                              <ListView fx:id="listFavRecipes" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="682.0" prefWidth="275.0" />
+                              <TextField fx:id="searchFav" layoutX="1.0" layoutY="2.0" prefHeight="25.0" prefWidth="273.0" promptText="search favourite recipes..." />
                            </children>
                         </AnchorPane>
                   </content>
