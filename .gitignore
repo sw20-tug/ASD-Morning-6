@@ -1,2 +1,3 @@
 /out
-appdata/images/*.png
+appdata/images/recipeimages/*.png
+appdata/*.bin
