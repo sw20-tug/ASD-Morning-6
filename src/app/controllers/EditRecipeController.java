@@ -99,12 +99,12 @@ public class EditRecipeController implements Initializable {
     }
 
     private void initBtnListener() {
-        btnCancel.setOnAction(event -> { onActionBtnCancel(event); });
-        btnSave.setOnAction(event -> { onActionBtnSave(event); });
-        btnPrevImage.setOnAction(event -> { onActionBtnPrevImage(event); });
-        btnNextImage.setOnAction(event -> { onActionBtnNextImage(event); });
-        btnAddImage.setOnAction(event -> { onActionBtnAddImage(event); });
-        btnRemoveImage.setOnAction(event -> { onActionBtnRemoveImage(event); });
+        btnCancel.setOnAction(this::onActionBtnCancel);
+        btnSave.setOnAction(this::onActionBtnSave);
+        btnPrevImage.setOnAction(this::onActionBtnPrevImage);
+        btnNextImage.setOnAction(this::onActionBtnNextImage);
+        btnAddImage.setOnAction(this::onActionBtnAddImage);
+        btnRemoveImage.setOnAction(this::onActionBtnRemoveImage);
     }
 
     private void initMealTypeSpinner() {

@@ -98,8 +98,6 @@ public class MainController implements Initializable {
     @FXML
     private AnchorPane apDetailView;
 
-
-
     private ObservableList<Recipe> recipeAllObservableList;
     private ObservableList<Recipe> recipeFavObservableList;
     private int currentImage = 0;
@@ -108,6 +106,16 @@ public class MainController implements Initializable {
 
     public MainController() {
 
+    }
+
+    public MainController(Label lblMessage, ComboBox<MealType> cmbMealType, Slider sliderPrepTime, Slider sliderCookTime, ListView listAllRecipes, ListView listFavRecipes, Button btnUndoFilter) {
+        this.lblMessage = lblMessage;
+        this.cmbMealType = cmbMealType;
+        this.sliderPrepTime = sliderPrepTime;
+        this.sliderCookTime = sliderCookTime;
+        this.listAllRecipes = listAllRecipes;
+        this.listFavRecipes = listFavRecipes;
+        this.btnUndoFilter = btnUndoFilter;
     }
 
     @FXML
@@ -422,7 +430,7 @@ public class MainController implements Initializable {
 
     }
 
-    private void filterRecipes(){
+    public void filterRecipes(){
         btnUndoFilter.setDisable(false);
         MealType chosenMealType = (MealType) cmbMealType.getSelectionModel().getSelectedItem();
         int prepTimeMin = (int) Math.round(sliderPrepTime.getValue());
