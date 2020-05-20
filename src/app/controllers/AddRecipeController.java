@@ -86,7 +86,7 @@ public class AddRecipeController implements Initializable {
 
     public AddRecipeController() {}
 
-    public AddRecipeController(Label lblMessage, TextField txtName, TextField txtDescription, Spinner spinType, Spinner spinPrepTime, Spinner spinCookTime, ToggleButton toggleFavourite, ToggleButton toggleGuideEnabled, Button btnSave, Button btnCancel, ImageView imageViewAdd, Button btnPrevImage, Button btnNextImage, Button btnAddImage, Button btnRemoveImage) {
+    public AddRecipeController(Recipe recipe, Vector<BufferedImage> bufferVec, Label lblMessage, TextField txtName, TextField txtDescription, Spinner spinType, Spinner spinPrepTime, Spinner spinCookTime, ToggleButton toggleFavourite, ToggleButton toggleGuideEnabled, Button btnSave, Button btnCancel, ImageView imageViewAdd, Button btnPrevImage, Button btnNextImage, Button btnAddImage, Button btnRemoveImage) {
         this.lblMessage = lblMessage;
         this.txtName = txtName;
         this.txtDescription = txtDescription;
@@ -102,6 +102,8 @@ public class AddRecipeController implements Initializable {
         this.btnNextImage = btnNextImage;
         this.btnAddImage = btnAddImage;
         this.btnRemoveImage = btnRemoveImage;
+        this.tmpRecipe = recipe;
+        this.bufferVec = bufferVec;
     }
 
     @FXML

@@ -30,6 +30,8 @@ public class MainControllerTest {
     private ListView listAllRecipes;
     private ListView listFavRecipes;
     private Button btnUndoFilter;
+    private Button btnModifyInstructions;
+    private Button btnStartCooking;
     private Label lblMessage;
 
     private Label lblName;
@@ -58,6 +60,8 @@ public class MainControllerTest {
         listAllRecipes = spy(new ListView());
         listFavRecipes = spy(new ListView());
         btnUndoFilter = spy(new Button());
+        btnModifyInstructions = spy(new Button());
+        btnStartCooking = spy(new Button());
         lblMessage = spy(new Label());
         lblName = spy(new Label());
         lblDescription = spy(new Label());
@@ -102,7 +106,7 @@ public class MainControllerTest {
 
         RecipeManager.setInstance(recipeManager);
 
-        controller = spy(new MainController(lblMessage, cmbMealType, sliderPrepTime, sliderCookTime, listAllRecipes,listFavRecipes, btnUndoFilter, apDetailView, lblName, lblDescription, lblMealType, lblPrepTime, lblCookingTime, imgFav));
+        controller = spy(new MainController(lblMessage, cmbMealType, sliderPrepTime, sliderCookTime, listAllRecipes,listFavRecipes, btnUndoFilter, btnModifyInstructions, btnStartCooking, apDetailView, lblName, lblDescription, lblMealType, lblPrepTime, lblCookingTime, imgFav));
 
         Mockito.doAnswer((i)-> null).when(controller).loadImage();
     }
@@ -171,9 +175,4 @@ public class MainControllerTest {
         assert lblDescription.getText().equals("test11 desc");
     }
 
-    @Test
-    void testDisplayCurrentRecipeWithNoCurrentRecipe () {
-        MainController.currentRecipe = null;
-        controller.displayCurrentRecipe();
-    }
 }

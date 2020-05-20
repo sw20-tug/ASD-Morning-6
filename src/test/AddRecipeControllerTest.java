@@ -24,7 +24,9 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.control.LabeledMatchers;
 
+import java.awt.image.BufferedImage;
 import java.time.Duration;
+import java.util.Vector;
 
 import static org.mockito.Mockito.*;
 
@@ -37,6 +39,8 @@ class AddRecipeControllerTest {
     private Button saveBtn;
     private Button cancelBtn;
     private RecipeManager recipeManager;
+    private Recipe tmpRecipe;
+    private Vector<BufferedImage> bufferVec;
 
     private Label lblMessage;
     private TextField txtName;
@@ -90,8 +94,10 @@ class AddRecipeControllerTest {
 
         toggleFavourite = spy(new ToggleButton());
         toggleGuideEnabled = spy(new ToggleButton());
+        tmpRecipe = new Recipe();
+        bufferVec = new Vector<>();
 
-        controller = spy(new AddRecipeController(lblMessage, txtName, txtDescription, spinType, spinPrepTime, spinCookTime, toggleFavourite, toggleGuideEnabled, saveBtn, cancelBtn, null, null, null, null, null));
+        controller = spy(new AddRecipeController(tmpRecipe, bufferVec ,lblMessage, txtName, txtDescription, spinType, spinPrepTime, spinCookTime, toggleFavourite, toggleGuideEnabled, saveBtn, cancelBtn, null, null, null, null, null));
 
         Mockito.doAnswer((i)-> null).when(controller).closeAddWindow();
 
