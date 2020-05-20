@@ -50,7 +50,7 @@
             <AnchorPane fx:id="apDetailView" layoutX="282.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1150.0" style="-fx-background-color: linen;">
                 <children>
                     <ImageView fx:id="imageViewDetails" fitHeight="270.0" fitWidth="360.0" layoutX="395.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true" />
-                    <Button fx:id="btnPrevImage" layoutX="355.0" layoutY="183.0" maxWidth="100.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionBtnPrevImage" opacity="0.8" prefHeight="60.0" prefWidth="40.0" style="-fx-background-color: lightsteelblue; -fx-background-radius: 3;" text="◀">
+                    <Button fx:id="btnPrevImage" layoutX="348.0" layoutY="183.0" maxWidth="100.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionBtnPrevImage" opacity="0.8" prefHeight="60.0" prefWidth="47.0" style="-fx-background-color: lightsteelblue; -fx-background-radius: 3;" text="◀">
                      <font>
                         <Font name="System Bold" size="21.0" />
                      </font>
@@ -60,7 +60,7 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                    <Button fx:id="btnNextImage" layoutX="755.0" layoutY="183.0" maxWidth="100.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionBtnNextImage" opacity="0.8" prefHeight="60.0" prefWidth="40.0" style="-fx-background-color: lightsteelblue; -fx-background-radius: 3;" text="▶">
+                    <Button fx:id="btnNextImage" layoutX="755.0" layoutY="183.0" maxWidth="100.0" minWidth="40.0" mnemonicParsing="false" onAction="#onActionBtnNextImage" opacity="0.8" prefHeight="60.0" prefWidth="49.0" style="-fx-background-color: lightsteelblue; -fx-background-radius: 3;" text="▶">
                      <font>
                         <Font size="21.0" />
                      </font>
@@ -71,7 +71,7 @@
                      <font>
                         <Font name="Calibri Bold" size="22.0" />
                      </font></Label>
-                  <Label layoutX="315.0" layoutY="382.0" prefHeight="23.0" prefWidth="72.0" text="Mealtype:">
+                  <Label layoutX="302.0" layoutY="382.0" prefHeight="23.0" prefWidth="85.0" text="Mealtype:">
                      <font>
                         <Font name="Calibri Bold" size="16.0" />
                      </font></Label>
@@ -79,7 +79,7 @@
                         <font>
                             <Font name="Calibri Bold" size="16.0" />
                         </font></Label>
-                    <Label layoutX="489.0" layoutY="382.0" prefHeight="23.0" prefWidth="126.0" text="Preparation Time:">
+                    <Label layoutX="469.0" layoutY="382.0" prefHeight="23.0" prefWidth="146.0" text="Preparation Time:">
                         <font>
                             <Font name="Calibri Bold" size="16.0" />
                         </font></Label>
@@ -87,7 +87,7 @@
                         <font>
                             <Font name="Calibri Bold" size="16.0" />
                         </font></Label>
-                    <Label layoutX="689.0" layoutY="382.0" prefHeight="23.0" prefWidth="98.0" text="Cooking Time:">
+                    <Label layoutX="670.0" layoutY="382.0" prefHeight="23.0" prefWidth="117.0" text="Cooking Time:">
                         <font>
                             <Font name="Calibri Bold" size="16.0" />
                         </font></Label>
@@ -100,17 +100,26 @@
                         <Font size="13.0" />
                      </font></Label>
                   <ImageView fx:id="imgFav" fitHeight="40.0" fitWidth="40.0" layoutX="255.0" layoutY="374.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button fx:id="btnModifyInstructions" layoutX="275.0" layoutY="621.0" mnemonicParsing="false" onAction="#onActionBtnModifyInstructions" text="Modify instructions" />
+                  <Button fx:id="btnModifyInstructions" layoutX="224.0" layoutY="639.0" mnemonicParsing="false" onAction="#onActionBtnModifyInstructions" prefHeight="45.0" prefWidth="142.0" style="-fx-background-color: #FFC107;" text="Modify instructions">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                  </Button>
+                  <Button fx:id="btnStartCooking" layoutX="755.0" layoutY="639.0" mnemonicParsing="false" onAction="#onActionBtnStartCooking" prefHeight="45.0" prefWidth="141.0" style="-fx-background-color: #FFC107;" text="Start cooking!">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                  </Button>
                 </children>
             </AnchorPane>
-            <HBox layoutX="276.0" layoutY="1.0" prefHeight="55.0" prefWidth="797.0">
+            <HBox layoutX="276.0" layoutY="1.0" prefHeight="55.0" prefWidth="1163.0" spacing="40.0">
                 <children>
                     <ComboBox fx:id="cmbMealType" onAction="#onActionCmbMealType" prefHeight="25.0" prefWidth="164.0" />
                     <Button fx:id="btnUndoFilter" mnemonicParsing="false" onAction="#onActionbtnUndoFilter" prefHeight="25.0" prefWidth="154.0" text="Undo Filter" />
-                    <Label fx:id="lblCookTimeFilter" prefHeight="17.0" prefWidth="123.0" text="Cooktime" />
+                    <Label fx:id="lblCookTimeFilter" alignment="CENTER" prefHeight="17.0" prefWidth="123.0" style="-fx-border-color: black;" text="Cooktime" />
                     <Slider fx:id="sliderCookTime" max="400.0" />
+                    <Label fx:id="lblPrepTimeFilter" alignment="CENTER" prefHeight="17.0" prefWidth="175.0" style="-fx-border-color: black;" text="Preptime" />
                     <Slider fx:id="sliderPrepTime" max="400.0" />
-                    <Label fx:id="lblPrepTimeFilter" prefHeight="17.0" prefWidth="175.0" text="Preptime" />
                 </children>
             </HBox>
          </children>

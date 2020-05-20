@@ -4,6 +4,7 @@ import app.enums.MealType;
 
 import java.io.Serializable;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -126,5 +127,19 @@ public class Recipe implements Serializable {
     @Override
     public String toString() {
         return "[" + id + ", " + name + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Recipe recipe = (Recipe) o;
+        return isFavourite == recipe.isFavourite &&
+                isGuideEnabled == recipe.isGuideEnabled &&
+                Objects.equals(name, recipe.name) &&
+                Objects.equals(description, recipe.description) &&
+                type == recipe.type &&
+                Objects.equals(prepTime, recipe.prepTime) &&
+                Objects.equals(cookTime, recipe.cookTime);
     }
 }
