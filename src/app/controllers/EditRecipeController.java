@@ -86,6 +86,21 @@ public class EditRecipeController implements Initializable {
         this.inRecipe = paramRecipe;
     }
 
+    public EditRecipeController(Label lblMessage, TextField txtName, TextField txtDescription, Spinner spinType, Spinner spinPrepTime, Spinner spinCookTime, ToggleButton toggleFavourite, ToggleButton toggleGuideEnabled, Button btnSave, Button btnCancel, Recipe inRecipe, Vector<String> editedImages) {
+        this.lblMessage = lblMessage;
+        this.txtName = txtName;
+        this.txtDescription = txtDescription;
+        this.spinType = spinType;
+        this.spinPrepTime = spinPrepTime;
+        this.spinCookTime = spinCookTime;
+        this.toggleFavourite = toggleFavourite;
+        this.toggleGuideEnabled = toggleGuideEnabled;
+        this.btnSave = btnSave;
+        this.btnCancel = btnCancel;
+        this.inRecipe = inRecipe;
+        this.editedImages = editedImages;
+    }
+
     @FXML
     private void initialize() {}
 
@@ -181,7 +196,7 @@ public class EditRecipeController implements Initializable {
         closeEditWindow();
     }
 
-    private void closeEditWindow() {
+    public void closeEditWindow() {
         Stage stage = (Stage) lblMessage.getScene().getWindow();
         stage.close();
     }
