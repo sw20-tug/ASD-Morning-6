@@ -114,7 +114,7 @@ public class MainController implements Initializable {
 
     }
 
-    public MainController(Label lblMessage, ComboBox<MealType> cmbMealType, Slider sliderPrepTime, Slider sliderCookTime, ListView listAllRecipes, ListView listFavRecipes, Button btnUndoFilter, AnchorPane apDetailView, Label lblName, Label lblDescription, Label lblMealType, Label lblPrepTime, Label lblCookingTime, ImageView imgFav) {
+    public MainController(Label lblMessage, ComboBox<MealType> cmbMealType, Slider sliderPrepTime, Slider sliderCookTime, ListView listAllRecipes, ListView listFavRecipes, Button btnUndoFilter, Button btnModifyInstructions, Button btnStartCooking ,AnchorPane apDetailView, Label lblName, Label lblDescription, Label lblMealType, Label lblPrepTime, Label lblCookingTime, ImageView imgFav) {
         this.lblMessage = lblMessage;
         this.cmbMealType = cmbMealType;
         this.sliderPrepTime = sliderPrepTime;
@@ -122,6 +122,8 @@ public class MainController implements Initializable {
         this.listAllRecipes = listAllRecipes;
         this.listFavRecipes = listFavRecipes;
         this.btnUndoFilter = btnUndoFilter;
+        this.btnModifyInstructions = btnModifyInstructions;
+        this.btnStartCooking = btnStartCooking;
         this.apDetailView = apDetailView;
 
         this.lblName = lblName;
