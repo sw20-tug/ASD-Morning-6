@@ -3,7 +3,6 @@ package app.controllers;
 import app.enums.MealType;
 import app.models.GlobalConstants;
 import app.models.Recipe;
-import app.models.RecipeManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -15,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.assertj.core.internal.bytebuddy.agent.builder.AgentBuilder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -23,12 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
-
-public class AddRecipeController implements Initializable {
+public class EditRecipeController implements Initializable {
 
     @FXML
     private Label lblMessage;
@@ -78,30 +75,15 @@ public class AddRecipeController implements Initializable {
     @FXML
     private Label lblPicCount;
 
-    private Vector<BufferedImage> bufferVec;
+    private Recipe inRecipe;
 
     private int currentImage = 0;
 
-    private Recipe tmpRecipe;
+    private Vector<String> editedImages;
 
-    public AddRecipeController() {}
 
-    public AddRecipeController(Label lblMessage, TextField txtName, TextField txtDescription, Spinner spinType, Spinner spinPrepTime, Spinner spinCookTime, ToggleButton toggleFavourite, ToggleButton toggleGuideEnabled, Button btnSave, Button btnCancel, ImageView imageViewAdd, Button btnPrevImage, Button btnNextImage, Button btnAddImage, Button btnRemoveImage) {
-        this.lblMessage = lblMessage;
-        this.txtName = txtName;
-        this.txtDescription = txtDescription;
-        this.spinType = spinType;
-        this.spinPrepTime = spinPrepTime;
-        this.spinCookTime = spinCookTime;
-        this.toggleFavourite = toggleFavourite;
-        this.toggleGuideEnabled = toggleGuideEnabled;
-        this.btnSave = btnSave;
-        this.btnCancel = btnCancel;
-        this.imageViewAdd = imageViewAdd;
-        this.btnPrevImage = btnPrevImage;
-        this.btnNextImage = btnNextImage;
-        this.btnAddImage = btnAddImage;
-        this.btnRemoveImage = btnRemoveImage;
+    public EditRecipeController(Recipe paramRecipe) {
+        this.inRecipe = paramRecipe;
     }
 
     @FXML
@@ -109,29 +91,48 @@ public class AddRecipeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setInfoMessage("Fill in the shown fields to add a new recipe!");
-        initBtnListener();
-        initMealTypeSpinner();
-        imageViewAdd.setImage(GlobalConstants.getPhotoFromPath(GlobalConstants.DUMMY_IMAGE_PATH));
+        setInfoMessage("Welcome to edit! - " + inRecipe.getName());
 
-        tmpRecipe = new Recipe();
-        bufferVec = new Vector<BufferedImage>();
+        editedImages = (Vector<String>) inRecipe.getPhotos().clone();
+        initBtnListener();
+        initDataFields();
     }
 
-    private void initBtnListener(){
-        btnCancel.setOnAction(event -> { onActionBtnCancel(event); });
-        btnSave.setOnAction(event -> { onActionBtnSave(event); });
-        btnPrevImage.setOnAction(event -> { onActionBtnPrevImage(event); });
-        btnNextImage.setOnAction(event -> { onActionBtnNextImage(event); });
-        btnAddImage.setOnAction(event -> { onActionBtnAddImage(event); });
-        btnRemoveImage.setOnAction(event -> { onActionBtnRemoveImage(event); });
+    private void initBtnListener() {
+        btnCancel.setOnAction(this::onActionBtnCancel);
+        btnSave.setOnAction(this::onActionBtnSave);
+        btnPrevImage.setOnAction(this::onActionBtnPrevImage);
+        btnNextImage.setOnAction(this::onActionBtnNextImage);
+        btnAddImage.setOnAction(this::onActionBtnAddImage);
+        btnRemoveImage.setOnAction(this::onActionBtnRemoveImage);
     }
 
     private void initMealTypeSpinner() {
         ObservableList<MealType> mealTypes = FXCollections.observableArrayList(MealType.FISH, MealType.PORK, MealType.VEGAN, MealType.BEEF, MealType.CHICKEN, MealType.VEGETARIAN);
         SpinnerValueFactory<MealType> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<MealType>(mealTypes);
-        valueFactory.setValue(MealType.BEEF);
+        valueFactory.setValue(inRecipe.getType());
         spinType.setValueFactory(valueFactory);
+        setInfoMessage("Fill in the shown fields to add a new recipe!");
+    }
+
+    private void initDataFields() {
+        txtName.setText(inRecipe.getName());
+        txtDescription.setText(inRecipe.getDescription());
+
+        initMealTypeSpinner();
+
+        spinPrepTime.getValueFactory().setValue((int)inRecipe.getPrepTime().toMinutes());
+        spinCookTime.getValueFactory().setValue((int)inRecipe.getCookTime().toMinutes());
+
+        toggleFavourite.setSelected(inRecipe.isFavourite());
+        toggleGuideEnabled.setSelected(inRecipe.isGuideEnabled());
+        lblPicCount.setText("Photos added (" + editedImages.size() + ")");
+        imageViewAdd.setImage(GlobalConstants.getPhotoFromPath(editedImages.size() != 0 ? editedImages.firstElement() : GlobalConstants.DUMMY_IMAGE_PATH));
+        if(editedImages.size() < 1)
+            btnRemoveImage.setDisable(true);
+
+
+        setSuccessMessage("Inserted current values!");
     }
 
     private void setInfoMessage(String msg) {
@@ -153,47 +154,43 @@ public class AddRecipeController implements Initializable {
         if (txtName.getText().isEmpty() || txtDescription.getText().isEmpty()) {
             setErrorMessage("Please enter some values in the text fields!");
         } else {
+            inRecipe.setName(txtName.getText());
+            inRecipe.setDescription(txtDescription.getText());
+            inRecipe.setType((MealType) spinType.getValue());
+            inRecipe.setPrepTime(Duration.ofMinutes(Long.valueOf((int) spinPrepTime.getValue())));
+            inRecipe.setCookTime(Duration.ofMinutes(Long.valueOf((int) spinCookTime.getValue())));
+            inRecipe.setFavourite(toggleFavourite.isSelected());
+            inRecipe.setGuideEnabled(toggleGuideEnabled.isSelected());
 
-            tmpRecipe.setName(txtName.getText());
-            tmpRecipe.setDescription(txtDescription.getText());
-            tmpRecipe.setType((MealType) spinType.getValue());
-            tmpRecipe.setCookTime(Duration.ofMinutes(Long.valueOf((int) spinPrepTime.getValue())));
-            tmpRecipe.setPrepTime(Duration.ofMinutes(Long.valueOf((int) spinCookTime.getValue())));
-            tmpRecipe.setFavourite(toggleFavourite.isSelected());
-            tmpRecipe.setGuideEnabled(toggleGuideEnabled.isSelected());
-
-            for(int i = 0; i < bufferVec.size(); i++) {
-                try {
-                    String imageName = GlobalConstants.RECIPEIMAGE_FOLDER_PATH + tmpRecipe.getId() + "_" + System.currentTimeMillis() + ".png";
-                    ImageIO.write(bufferVec.get(i), "png", new File(imageName));
-                    tmpRecipe.addPhoto(imageName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            List<String> toDelete = new ArrayList<>(inRecipe.getPhotos());
+            toDelete.removeAll(editedImages);
+            for(String s : toDelete){
+                File f = new File(s);
+                f.delete();
             }
+            inRecipe.setPhotos(editedImages);
 
-            RecipeManager.getInstance().addRecipe(tmpRecipe);
 
-            setSuccessMessage("Added an new Recipe!");
-            MainController.currentRecipe = tmpRecipe;
-            closeAddWindow();
+            setSuccessMessage("Updated Recipe!");
+
+            closeEditWindow();
         }
     }
 
     public void onActionBtnCancel(ActionEvent actionEvent) {
-        closeAddWindow();
+        closeEditWindow();
     }
 
-    public void closeAddWindow() {
+    private void closeEditWindow() {
         Stage stage = (Stage) lblMessage.getScene().getWindow();
         stage.close();
     }
 
     public void onActionBtnPrevImage(ActionEvent actionEvent) {
-        if(bufferVec.size() > 1) {
+        if(editedImages.size() > 1) {
             if(currentImage <= 0)
             {
-                currentImage = bufferVec.size()-1;
+                currentImage = editedImages.size()-1;
             }
             else
             {
@@ -204,8 +201,9 @@ public class AddRecipeController implements Initializable {
     }
 
     public void onActionBtnNextImage(ActionEvent actionEvent) {
-        if(bufferVec.size() > 1) {
-            if(currentImage >= bufferVec.size()-1)
+
+        if(editedImages.size() > 1) {
+            if(currentImage >= editedImages.size()-1)
             {
                 currentImage = 0;
             }
@@ -226,35 +224,41 @@ public class AddRecipeController implements Initializable {
             try {
                 BufferedImage img = ImageIO.read(file);
                 imageViewAdd.setImage(SwingFXUtils.toFXImage(img, null));
-                bufferVec.add(img);
-                currentImage = bufferVec.size()-1;
-                lblPicCount.setText("Photos added (" + bufferVec.size() + ")");
+
+                String imageName = GlobalConstants.RECIPEIMAGE_FOLDER_PATH + inRecipe.getId() + "_" + System.currentTimeMillis() + ".png";
+                ImageIO.write(img, "png", new File(imageName));
+                editedImages.add(imageName);
+
+                lblPicCount.setText("Photos added (" + editedImages.size() + ")");
 
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
         }
         btnRemoveImage.setDisable(false);
+
     }
 
     public void onActionBtnRemoveImage(ActionEvent actionEvent) {
-        bufferVec.remove(currentImage);
+        if(editedImages.size() > 0)
+            editedImages.remove(currentImage);
+
         if(currentImage <= 0)
         {
-            currentImage = bufferVec.size()-1;
+            currentImage = editedImages.size()-1;
         }
         else
         {
             currentImage--;
         }
         loadImage();
-        lblPicCount.setText("Photos added (" + bufferVec.size() + ")");
-
+        lblPicCount.setText("Photos added (" + editedImages.size() + ")");
     }
 
     private void loadImage() {
-        if (bufferVec.size() > 0) {
-            imageViewAdd.setImage(SwingFXUtils.toFXImage(bufferVec.get(currentImage), null));
+        if (editedImages.size() > 0) {
+            imageViewAdd.setImage(GlobalConstants.getPhotoFromPath(editedImages.elementAt(currentImage)));
+
         }
         else {
             imageViewAdd.setImage(GlobalConstants.getPhotoFromPath(GlobalConstants.DUMMY_IMAGE_PATH));
@@ -262,3 +266,5 @@ public class AddRecipeController implements Initializable {
         }
     }
 }
+
+

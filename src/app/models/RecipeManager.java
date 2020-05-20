@@ -1,14 +1,15 @@
 package app.models;
 
+import app.enums.MealType;
+
 import java.io.Serializable;
+import java.util.UUID;
 import java.util.Vector;
 
 public class RecipeManager implements Serializable {
     private static RecipeManager instance;
 
     private Vector<Recipe> recipes;
-
-    private static int id = 1;
 
     public RecipeManager() {
         this.recipes = new Vector<>();
@@ -30,27 +31,72 @@ public class RecipeManager implements Serializable {
     }
 
     public void setRecipes(Vector<Recipe> recipes) {
-        this.recipes = recipes;
+        for(Recipe recipe : recipes){
+            addRecipe(recipe);
+        }
     }
 
     public Vector<Recipe> getFavRecipes() {
         Vector<Recipe> retList = new Vector<>();
 
-        for(int i = 0; i < this.recipes.size(); i++){
-            if(this.recipes.get(i).isFavourite())
-                retList.add(recipes.get(i));
+        for (Recipe recipe : this.recipes) {
+            if (recipe.isFavourite())
+                retList.add(recipe);
         }
 
         return retList;
     }
 
-    public void addRecipe(Recipe r) {
-        r.setId(id);
+    public void addRecipe(Recipe r) throws IllegalArgumentException {
+        if(r == null){
+            throw new IllegalArgumentException("Not possible to add null!");
+        }
         this.recipes.add(r);
-        id++;
     }
 
     public void deleteRecipe(Recipe r){
         this.recipes.remove(r);
     }
+    public void updateRecipe(UUID id, Recipe newRecipe) {
+        for (Recipe r : this.recipes) {
+            if (r.getId() == id) {
+                r.setName(newRecipe.getName());
+                r.setDescription(newRecipe.getDescription());
+                r.setType(newRecipe.getType());
+                r.setPrepTime(newRecipe.getPrepTime());
+                r.setCookTime(newRecipe.getCookTime());
+                r.setFavourite(newRecipe.isFavourite());
+                r.setGuideEnabled(newRecipe.isGuideEnabled());
+            }
+        }
+        //TODO photos update
+    }
+
+    public Vector<Recipe> getRecipesByMealType(MealType chosenMealType, int prepTimeMin, int cookTimeMin) {
+        Vector<Recipe> retList = new Vector<>();
+
+        for (Recipe r : this.recipes) {
+            if((r.getType() == chosenMealType || chosenMealType == null)
+                    && r.getPrepTime().toMinutes() >= prepTimeMin
+                    && r.getCookTime().toMinutes() >= cookTimeMin)
+                retList.add(r);
+        }
+
+        return retList;
+    }
+
+    public Vector<Recipe> getFavRecipesByMealType(MealType chosenMealType, int prepTimeMin, int cookTimeMin) {
+        Vector<Recipe> retList = new Vector<>();
+
+        for (Recipe r : this.recipes) {
+            if(r.isFavourite()
+                    && (r.getType() == chosenMealType || chosenMealType == null)
+                    && r.getPrepTime().toMinutes() >= prepTimeMin
+                    && r.getCookTime().toMinutes() >= cookTimeMin)
+                retList.add(r);
+        }
+
+        return retList;
+    }
+
 }
