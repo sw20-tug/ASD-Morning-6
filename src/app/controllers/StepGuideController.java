@@ -56,6 +56,16 @@ public class StepGuideController implements Initializable {
         this.inRecipe = r;
     }
 
+    public StepGuideController(Label lblMessage, Label lblTask, Label lblDescription, ImageView imgInstruction, Button btnContinue, Button btnBack, Recipe inRecipe) {
+        this.lblMessage = lblMessage;
+        this.lblTask = lblTask;
+        this.lblDescription = lblDescription;
+        this.imgInstruction = imgInstruction;
+        this.btnBack = btnBack;
+        this.btnContinue = btnContinue;
+        this.inRecipe = inRecipe;
+    }
+
     @FXML
     private void initialize() {
     }
@@ -67,7 +77,7 @@ public class StepGuideController implements Initializable {
         displayInstruction();
     }
 
-    private void initViewFields() {
+    public void initViewFields() {
         instructionIndexCounter = 0;
 
         if (inRecipe.getCookInstructions().size() == 0) {
@@ -97,7 +107,7 @@ public class StepGuideController implements Initializable {
         lblMessage.setText("SUCCESS --> " + msg);
     }
 
-    private void displayInstruction() {
+    public void displayInstruction() {
         if (inRecipe.getCookInstructions().size() > 0) {
             lblTask.setText(inRecipe.getCookInstructions().get(instructionIndexCounter).getTask());
             lblDescription.setText(inRecipe.getCookInstructions().get(instructionIndexCounter).getDescription());
