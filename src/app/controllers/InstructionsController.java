@@ -76,6 +76,24 @@ public class InstructionsController implements Initializable {
         this.inRecipe = r;
     }
 
+    public InstructionsController(Label lblMessage, ListView listInstructions, TextField txtTitle, TextArea txtAreaDescription, Button btnDelete, Button btnAdd, Button btnCancel, Button btnSetImage, Button btnRemoveImage, Button btnInstructionUp, Button btnInstructionDown, ImageView imgInstruction, Recipe inRecipe, ObservableList<Instruction> tmpInstructions, Instruction currentInstruction) {
+        this.lblMessage = lblMessage;
+        this.listInstructions = listInstructions;
+        this.txtTitle = txtTitle;
+        this.txtAreaDescription = txtAreaDescription;
+        this.btnDelete = btnDelete;
+        this.btnAdd = btnAdd;
+        this.btnCancel = btnCancel;
+        this.btnSetImage = btnSetImage;
+        this.btnRemoveImage = btnRemoveImage;
+        this.btnInstructionUp = btnInstructionUp;
+        this.btnInstructionDown = btnInstructionDown;
+        this.imgInstruction = imgInstruction;
+        this.inRecipe = inRecipe;
+        this.tmpInstructions = tmpInstructions;
+        this.currentInstruction = currentInstruction;
+    }
+
     @FXML
     private void initialize() {
     }
@@ -86,7 +104,7 @@ public class InstructionsController implements Initializable {
         initViewFields();
     }
 
-    private void initViewFields() {
+    public void initViewFields() {
         tmpInstructions = FXCollections.observableList(inRecipe.getCookInstructions());
         listInstructions.setItems(tmpInstructions);
 
@@ -107,7 +125,7 @@ public class InstructionsController implements Initializable {
         setInfoMessage("Welcome to modify instructions!");
     }
 
-    private void initListener() {
+    public void initListener() {
         btnCancel.setOnAction(event -> {
             onActionBtnCancel(event);
         });
@@ -134,22 +152,22 @@ public class InstructionsController implements Initializable {
         });
     }
 
-    private void setInfoMessage(String msg) {
+    public void setInfoMessage(String msg) {
         lblMessage.setStyle("-fx-background-color:yellow; -fx-text-fill:black;");
         lblMessage.setText("INFO --> " + msg);
     }
 
-    private void setErrorMessage(String msg) {
+    public void setErrorMessage(String msg) {
         lblMessage.setStyle("-fx-background-color:red; -fx-text-fill:white;");
         lblMessage.setText("FAILURE --> " + msg);
     }
 
-    private void setSuccessMessage(String msg) {
+    public void setSuccessMessage(String msg) {
         lblMessage.setStyle("-fx-background-color:green; -fx-text-fill:white;");
         lblMessage.setText("SUCCESS --> " + msg);
     }
 
-    private void onActionBtnAdd(ActionEvent actionEvent) {
+    public void onActionBtnAdd(ActionEvent actionEvent) {
         updateCurrentInstruction();
 
         tmpInstructions.add(new Instruction("newTitle", "newDescription", ""));
@@ -163,7 +181,7 @@ public class InstructionsController implements Initializable {
         setSuccessMessage("New instruction added, please edit on the right side");
     }
 
-    private void onActionBtnDelete(ActionEvent actionEvent) {
+    public void onActionBtnDelete(ActionEvent actionEvent) {
         if (currentInstruction != null) {
             GlobalConstants.removeImageFromMap(currentInstruction.getPhoto());
             tmpInstructions.remove(currentInstruction);
@@ -180,17 +198,17 @@ public class InstructionsController implements Initializable {
         }
     }
 
-    private void onActionBtnCancel(ActionEvent actionEvent) {
+    public void onActionBtnCancel(ActionEvent actionEvent) {
         updateCurrentInstruction();
         closeInstructionWindow();
     }
 
-    private void closeInstructionWindow() {
+    public void closeInstructionWindow() {
         Stage stage = (Stage) lblMessage.getScene().getWindow();
         stage.close();
     }
 
-    private void displayCurrentInstruction() {
+    public void displayCurrentInstruction() {
         if (currentInstruction != null) {
             txtTitle.setText(currentInstruction.getTask());
             txtAreaDescription.setText(currentInstruction.getDescription());
@@ -207,7 +225,7 @@ public class InstructionsController implements Initializable {
         }
     }
 
-    private void lvItemClicked(MouseEvent mouseEvent) {
+    public void lvItemClicked(MouseEvent mouseEvent) {
         updateCurrentInstruction();
         currentInstruction = (Instruction) listInstructions.getSelectionModel().getSelectedItem();
         if (currentInstruction != null) {
@@ -218,14 +236,14 @@ public class InstructionsController implements Initializable {
         setSuccessMessage("Instruction updated!");
     }
 
-    private void updateCurrentInstruction() {
+    public void updateCurrentInstruction() {
         if (currentInstruction != null) {
             currentInstruction.setTask(txtTitle.getText());
             currentInstruction.setDescription(txtAreaDescription.getText());
         }
     }
 
-    private void onActionBtnSetImage(ActionEvent actionEvent) {
+    public void onActionBtnSetImage(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Image");
         File file = fileChooser.showOpenDialog(btnSetImage.getScene().getWindow());
@@ -248,14 +266,14 @@ public class InstructionsController implements Initializable {
         btnRemoveImage.setVisible(true);
     }
 
-    private void onActionBtnRemoveImage(ActionEvent actionEvent) {
+    public void onActionBtnRemoveImage(ActionEvent actionEvent) {
         GlobalConstants.removeImageFromMap(currentInstruction.getPhoto());
         currentInstruction.setPhoto("");
         imgInstruction.setImage(GlobalConstants.getPhotoFromPath(currentInstruction.getPhoto()));
         btnRemoveImage.setVisible(false);
     }
 
-    private void onActionBtnInstructionDown(ActionEvent event) {
+    public void onActionBtnInstructionDown(ActionEvent event) {
         int selectedIndex = listInstructions.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex != -1) {
@@ -278,7 +296,7 @@ public class InstructionsController implements Initializable {
         }
     }
 
-    private void onActionBtnInstructionUp(ActionEvent event) {
+    public void onActionBtnInstructionUp(ActionEvent event) {
         int selectedIndex = listInstructions.getSelectionModel().getSelectedIndex();
 
         if (selectedIndex != -1) {

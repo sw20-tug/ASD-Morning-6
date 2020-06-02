@@ -158,6 +158,37 @@ public class StepGuideControllerTest {
     }
 
     @Test
+    void testStepBackToPrevInstruction(FxRobot robot) {
+        controllerOne.initViewFields();
+
+        try { // catching the fileNotFoundException for the pictures, not occur in the real application
+            controllerOne.displayInstruction();
+        } catch (Exception ex) {}
+
+        tempInstructions = recipeManager.getRecipes().elementAt(1).getCookInstructions();
+
+        assert tempInstructions.size() > 0;
+        assert btnBack.isVisible() == true;
+        assert btnContinue.isVisible() == true;
+        assert lblTask.getText().equals(tempInstructions.elementAt(0).getTask());
+        assert lblDescription.getText().equals(tempInstructions.elementAt(0).getDescription());
+
+        try { // catching the fileNotFoundException for the pictures, not occur in the real application
+            controllerOne.onActionBtnContinue(null);
+        } catch (Exception ex) {}
+
+        assert lblTask.getText().equals(tempInstructions.elementAt(1).getTask());
+        assert lblDescription.getText().equals(tempInstructions.elementAt(1).getDescription());
+
+        try { // catching the fileNotFoundException for the pictures, not occur in the real application
+            controllerOne.onActionBtnBack(null);
+        } catch (Exception ex) {}
+
+        assert lblTask.getText().equals(tempInstructions.elementAt(0).getTask());
+        assert lblDescription.getText().equals(tempInstructions.elementAt(0).getDescription());
+    }
+
+    @Test
     void testUpperLimit() {
         try { // catching the fileNotFoundException for the pictures, not occur in the real application
             controllerOne.onActionBtnContinue(null);
