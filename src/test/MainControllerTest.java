@@ -7,9 +7,12 @@ import app.models.RecipeManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.testfx.framework.junit5.ApplicationExtension;
 
 import java.time.Duration;
@@ -27,7 +30,19 @@ public class MainControllerTest {
     private ListView listAllRecipes;
     private ListView listFavRecipes;
     private Button btnUndoFilter;
+    private Button btnModifyInstructions;
+    private Button btnStartCooking;
     private Label lblMessage;
+
+    private Label lblName;
+    private Label lblDescription;
+    private Label lblMealType;
+    private Label lblPrepTime;
+    private Label lblCookingTime;
+
+    private AnchorPane apDetailView;
+
+    private ImageView imgFav;
 
     private MainController controller;
 
@@ -45,8 +60,23 @@ public class MainControllerTest {
         listAllRecipes = spy(new ListView());
         listFavRecipes = spy(new ListView());
         btnUndoFilter = spy(new Button());
+        btnModifyInstructions = spy(new Button());
+        btnStartCooking = spy(new Button());
         lblMessage = spy(new Label());
+        lblName = spy(new Label());
+        lblDescription = spy(new Label());
+        lblMealType = spy(new Label());
+        lblPrepTime = spy(new Label());
+        lblCookingTime = spy(new Label());
+        apDetailView = spy(new AnchorPane());
 
+        lblName = spy(new Label());
+        lblDescription = spy(new Label());
+        lblMealType = spy(new Label());
+        lblPrepTime = spy(new Label());
+        lblCookingTime = spy(new Label());
+
+        imgFav = spy(new ImageView());
 
         Recipe recipe1 = new Recipe("test1", "test1 desc", MealType.FISH, Duration.ofMinutes(5), Duration.ofMinutes(30));
         Recipe recipe2 = new Recipe("test2", "test2 desc", MealType.PORK, Duration.ofMinutes(7), Duration.ofMinutes(5));
@@ -76,7 +106,9 @@ public class MainControllerTest {
 
         RecipeManager.setInstance(recipeManager);
 
-        controller = new MainController(lblMessage, cmbMealType, sliderPrepTime, sliderCookTime, listAllRecipes,listFavRecipes, btnUndoFilter);
+        controller = spy(new MainController(lblMessage, cmbMealType, sliderPrepTime, sliderCookTime, listAllRecipes,listFavRecipes, btnUndoFilter, btnModifyInstructions, btnStartCooking, apDetailView, lblName, lblDescription, lblMealType, lblPrepTime, lblCookingTime, imgFav));
+
+        Mockito.doAnswer((i)-> null).when(controller).loadImage();
     }
 
     @Test
@@ -130,4 +162,17 @@ public class MainControllerTest {
         assert listAllRecipes.getItems().size() == 1;
 
     }
+
+    @Test
+    void testDisplayCurrentRecipe () {
+        MainController.currentRecipe = new Recipe("test11", "test11 desc", MealType.FISH, Duration.ofMinutes(20), Duration.ofMinutes(11));
+        controller.displayCurrentRecipe();
+
+        assert lblName.getText().equals("test11");
+        assert lblMealType.getText().equals(MealType.FISH.toString());
+        assert lblPrepTime.getText().equals(20 + " min.") ;
+        assert lblCookingTime.getText().equals(11 + " min.");
+        assert lblDescription.getText().equals("test11 desc");
+    }
+
 }

@@ -96,6 +96,12 @@ public class MainController implements Initializable {
     private Button btnUndoFilter;
 
     @FXML
+    private Button btnStartCooking;
+
+    @FXML
+    private Button btnModifyInstructions;
+
+    @FXML
     private AnchorPane apDetailView;
 
     private ObservableList<Recipe> recipeAllObservableList;
@@ -108,7 +114,7 @@ public class MainController implements Initializable {
 
     }
 
-    public MainController(Label lblMessage, ComboBox<MealType> cmbMealType, Slider sliderPrepTime, Slider sliderCookTime, ListView listAllRecipes, ListView listFavRecipes, Button btnUndoFilter) {
+    public MainController(Label lblMessage, ComboBox<MealType> cmbMealType, Slider sliderPrepTime, Slider sliderCookTime, ListView listAllRecipes, ListView listFavRecipes, Button btnUndoFilter, Button btnModifyInstructions, Button btnStartCooking ,AnchorPane apDetailView, Label lblName, Label lblDescription, Label lblMealType, Label lblPrepTime, Label lblCookingTime, ImageView imgFav) {
         this.lblMessage = lblMessage;
         this.cmbMealType = cmbMealType;
         this.sliderPrepTime = sliderPrepTime;
@@ -116,6 +122,17 @@ public class MainController implements Initializable {
         this.listAllRecipes = listAllRecipes;
         this.listFavRecipes = listFavRecipes;
         this.btnUndoFilter = btnUndoFilter;
+        this.btnModifyInstructions = btnModifyInstructions;
+        this.btnStartCooking = btnStartCooking;
+        this.apDetailView = apDetailView;
+
+        this.lblName = lblName;
+        this.lblDescription = lblDescription;
+        this.lblMealType = lblMealType;
+        this.lblPrepTime = lblPrepTime;
+        this.lblCookingTime = lblCookingTime;
+
+        this.imgFav = imgFav;
     }
 
     @FXML
@@ -139,7 +156,6 @@ public class MainController implements Initializable {
     }
 
     private void initViewElements() throws IOException {
-
         imgFav.setImage(GlobalConstants.getPhotoFromPath(GlobalConstants.FAV_IMAGE_PATH));
         GlobalConstants.getPhotoFromPath(GlobalConstants.DUMMY_IMAGE_PATH);
         setInfoMessage("Welcome to COOK! - " + RecipeManager.getInstance().getRecipes().size() + " Recipes loaded");
@@ -169,19 +185,6 @@ public class MainController implements Initializable {
                 else if (recipe.getType().toString().toLowerCase().contains(newValue.toLowerCase()))
                     return true;
 
-                /* // search for instruction
-                Vector<Instruction> instructions = recipe.getCookInstructions();
-
-                // check every instruction for search term
-                for (int i = 0; i < recipe.getCookInstructions().size(); i++)
-                {
-                    if (instructions.get(i).getDescription().contains(newValue.toLowerCase()))
-                        return true;
-                    else if (instructions.get(i).getTask().contains(newValue.toLowerCase()))
-                        return true;
-                }
-                */
-
                 return false;
             });
         });
@@ -207,18 +210,6 @@ public class MainController implements Initializable {
                 else if (recipe.getType().toString().toLowerCase().contains(newValue.toLowerCase()))
                     return true;
 
-                /* // search for instruction
-                Vector<Instruction> instructions = recipe.getCookInstructions();
-
-                // check every instruction for search term
-                for (int i = 0; i < recipe.getCookInstructions().size(); i++)
-                {
-                    if (instructions.get(i).getDescription().contains(newValue.toLowerCase()))
-                        return true;
-                    else if (instructions.get(i).getTask().contains(newValue.toLowerCase()))
-                        return true;
-                }
-                */
                 return false;
             });
         });
@@ -226,8 +217,6 @@ public class MainController implements Initializable {
         listFavRecipes.setItems(new SortedList<Recipe>(favFiltered));
 
     }
-
-
 
     private void fillListViews() {
         listAllRecipes.setCellFactory(recipeListView -> new RecipeListViewCell());
@@ -384,7 +373,7 @@ public class MainController implements Initializable {
         }
     }
 
-    private void loadImage() {
+    public void loadImage() {
         if (currentRecipe.getPhotos().size() > 0) {
             imageViewDetails.setImage(GlobalConstants.getPhotoFromPath(currentRecipe.getPhotos().elementAt(currentImage)));
         }
@@ -393,7 +382,7 @@ public class MainController implements Initializable {
         }
     }
 
-    private void displayCurrentRecipe(){
+    public void displayCurrentRecipe() {
         apDetailView.setVisible(true);
         lblName.setText(currentRecipe.getName());
         lblMealType.setText(currentRecipe.getType().toString());
@@ -402,15 +391,22 @@ public class MainController implements Initializable {
         lblDescription.setText(currentRecipe.getDescription());
         currentImage = 0;
 
-        if(currentRecipe.isFavourite()){
+        if (currentRecipe.isFavourite()) {
             imgFav.setVisible(true);
-        }else{
+        } else {
             imgFav.setVisible(false);
         }
 
         loadImage();
-        //TODO display instructions??
 
+        if (currentRecipe.isGuideEnabled()) {
+            btnModifyInstructions.setVisible(true);
+            btnStartCooking.setVisible(true);
+        }
+        else {
+            btnModifyInstructions.setVisible(false);
+            btnStartCooking.setVisible(false);
+        }
     }
 
     public void onActionbtnUndoFilter(ActionEvent actionEvent) {
@@ -478,6 +474,55 @@ public class MainController implements Initializable {
             stageEditView.showAndWait();
             displayCurrentRecipe();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onActionBtnModifyInstructions(ActionEvent actionEvent) {
+        setInfoMessage("Modify instructions window is open!");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/editInstructions.fxml"));
+        Parent rootEditView = null;
+        try {
+            InstructionsController instructionsController = new InstructionsController(currentRecipe);
+
+            fxmlLoader.setController(instructionsController);
+            rootEditView = (Parent) fxmlLoader.load();
+            Stage stageInstructionsView = new Stage();
+            stageInstructionsView.initModality(Modality.APPLICATION_MODAL);
+            stageInstructionsView.setTitle("MODIFY INSTRUCTIONS");
+            stageInstructionsView.setResizable(false);
+            stageInstructionsView.setScene(new Scene(rootEditView));
+
+            stageInstructionsView.setOnHidden((WindowEvent event1) -> {
+                updateView();
+            });
+
+            stageInstructionsView.showAndWait();
+            displayCurrentRecipe();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onActionBtnStartCooking(ActionEvent actionEvent) {
+        setInfoMessage("GUIDE window is open!");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/views/stepGuide.fxml"));
+        Parent rootEditView = null;
+        try {
+            StepGuideController stepGuideController = new StepGuideController(currentRecipe);
+
+            fxmlLoader.setController(stepGuideController);
+            rootEditView = (Parent) fxmlLoader.load();
+            Stage stageGuideView = new Stage();
+            stageGuideView.initModality(Modality.APPLICATION_MODAL);
+            stageGuideView.setTitle("COOKING GUIDE");
+            stageGuideView.setResizable(false);
+            stageGuideView.setScene(new Scene(rootEditView));
+            stageGuideView.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }

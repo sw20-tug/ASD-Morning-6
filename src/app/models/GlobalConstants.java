@@ -2,6 +2,7 @@ package app.models;
 
 import javafx.scene.image.Image;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -51,6 +52,13 @@ public class GlobalConstants
             return img;
         }
 
+    }
+
+    public static void removeImageFromMap(String key) {
+        File f = new File(key);
+        f.delete();
+
+        IMAGES.remove(key);
     }
 
 }
